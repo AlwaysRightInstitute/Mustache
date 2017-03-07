@@ -15,7 +15,6 @@ all :
 
 clean :
 	$(SWIFT_CLEAN_TOOL)
-	@$(MAKE) -C Samples clean
 
 distclean : clean
 	rm -rf .build
