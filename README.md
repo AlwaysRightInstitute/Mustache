@@ -1,5 +1,10 @@
 # Mustache
 
+![Swift3](https://img.shields.io/badge/swift-3-blue.svg)
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
+![tuxOS](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
+![Travis](https://travis-ci.org/AlwaysRightInstitute/mustache.svg?branch=develop)
+
 A simple Mustache parser/evaluator for Swift.
 
 [Mustache](http://mustache.github.io) is a very simple templating language.
@@ -58,3 +63,15 @@ Sample code to parse and evaluate the template:
     let result = tree.render(object: sampleDict)
 
 You get the idea.
+
+### Who
+
+**mustache** is brought to you by
+[The Always Right Institute](http://www.alwaysrightinstitute.com)
+and
+[ZeeZide](http://zeezide.de).
+We like feedback, GitHub stars, cool contract work,
+presumably any form of praise you can think of.
+We don't like people who are wrong.
+
+Ask questions on the [Noze.io Slack](http://slack.noze.io).
