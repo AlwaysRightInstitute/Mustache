@@ -217,7 +217,9 @@ public class MustacheParser {
 
 extension String {
   
-  static func fromCString(_ cs: UnsafePointer<CChar>, length olength: Int?) -> String? {
+  static func fromCString(_ cs: UnsafePointer<CChar>, length olength: Int?)
+              -> String?
+  {
     guard let length = olength else { // no length given, use \0 std imp
       return String(validatingUTF8: cs)
     }

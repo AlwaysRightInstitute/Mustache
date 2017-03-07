@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E83AF9271E3E41670039F300 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9211E3E41670039F300 /* Helpers.swift */; };
-		E83AF9281E3E41670039F300 /* HTMLEscape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9221E3E41670039F300 /* HTMLEscape.swift */; };
-		E83AF9291E3E41670039F300 /* MustacheNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9231E3E41670039F300 /* MustacheNode.swift */; };
-		E83AF92A1E3E41670039F300 /* MustacheParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9241E3E41670039F300 /* MustacheParser.swift */; };
-		E83AF92B1E3E41670039F300 /* MustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9251E3E41670039F300 /* MustacheRenderingContext.swift */; };
-		E83AF92C1E3E41670039F300 /* SimpleKVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83AF9261E3E41670039F300 /* SimpleKVC.swift */; };
 		E8AFFF431E6F11B50074266E /* libmustache.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83AF8F81E3E40500039F300 /* libmustache.dylib */; };
 		E8AFFF4A1E6F125D0074266E /* MustacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF491E6F125D0074266E /* MustacheTests.swift */; };
+		E8AFFF521E6F15580074266E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4C1E6F15580074266E /* Helpers.swift */; };
+		E8AFFF531E6F15590074266E /* HTMLEscape.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4D1E6F15580074266E /* HTMLEscape.swift */; };
+		E8AFFF541E6F15590074266E /* MustacheNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4E1E6F15580074266E /* MustacheNode.swift */; };
+		E8AFFF551E6F15590074266E /* MustacheParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4F1E6F15580074266E /* MustacheParser.swift */; };
+		E8AFFF561E6F15590074266E /* MustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF501E6F15580074266E /* MustacheRenderingContext.swift */; };
+		E8AFFF571E6F15590074266E /* SimpleKVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF511E6F15580074266E /* SimpleKVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,16 +30,17 @@
 /* Begin PBXFileReference section */
 		E83AF8F81E3E40500039F300 /* libmustache.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libmustache.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83AF9201E3E415E0039F300 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		E83AF9211E3E41670039F300 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = Sources/Helpers.swift; sourceTree = "<group>"; };
-		E83AF9221E3E41670039F300 /* HTMLEscape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTMLEscape.swift; path = Sources/HTMLEscape.swift; sourceTree = "<group>"; };
-		E83AF9231E3E41670039F300 /* MustacheNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode.swift; path = Sources/MustacheNode.swift; sourceTree = "<group>"; };
-		E83AF9241E3E41670039F300 /* MustacheParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser.swift; path = Sources/MustacheParser.swift; sourceTree = "<group>"; };
-		E83AF9251E3E41670039F300 /* MustacheRenderingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheRenderingContext.swift; path = Sources/MustacheRenderingContext.swift; sourceTree = "<group>"; };
-		E83AF9261E3E41670039F300 /* SimpleKVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVC.swift; path = Sources/SimpleKVC.swift; sourceTree = "<group>"; };
 		E896BA531E6F1047003183A8 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Base.xcconfig; path = xcconfig/Base.xcconfig; sourceTree = "<group>"; };
 		E896BA541E6F1047003183A8 /* SharedLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SharedLib.xcconfig; path = xcconfig/SharedLib.xcconfig; sourceTree = "<group>"; };
 		E8AFFF3E1E6F11B50074266E /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8AFFF491E6F125D0074266E /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustacheTests/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
+		E8AFFF4B1E6F154F0074266E /* GNUmakefile */ = {isa = PBXFileReference; lastKnownFileType = text; name = GNUmakefile; path = Sources/mustache/GNUmakefile; sourceTree = "<group>"; };
+		E8AFFF4C1E6F15580074266E /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = Sources/mustache/Helpers.swift; sourceTree = "<group>"; };
+		E8AFFF4D1E6F15580074266E /* HTMLEscape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTMLEscape.swift; path = Sources/mustache/HTMLEscape.swift; sourceTree = "<group>"; };
+		E8AFFF4E1E6F15580074266E /* MustacheNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheNode.swift; path = Sources/mustache/MustacheNode.swift; sourceTree = "<group>"; };
+		E8AFFF4F1E6F15580074266E /* MustacheParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheParser.swift; path = Sources/mustache/MustacheParser.swift; sourceTree = "<group>"; };
+		E8AFFF501E6F15580074266E /* MustacheRenderingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheRenderingContext.swift; path = Sources/mustache/MustacheRenderingContext.swift; sourceTree = "<group>"; };
+		E8AFFF511E6F15580074266E /* SimpleKVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SimpleKVC.swift; path = Sources/mustache/SimpleKVC.swift; sourceTree = "<group>"; };
 		E8C094DF1E49FA670041E7E8 /* GNUmakefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = GNUmakefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,12 +86,12 @@
 		E83AF91F1E3E41570039F300 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				E83AF9241E3E41670039F300 /* MustacheParser.swift */,
-				E83AF9231E3E41670039F300 /* MustacheNode.swift */,
-				E83AF9251E3E41670039F300 /* MustacheRenderingContext.swift */,
-				E83AF9261E3E41670039F300 /* SimpleKVC.swift */,
-				E83AF9221E3E41670039F300 /* HTMLEscape.swift */,
-				E83AF9211E3E41670039F300 /* Helpers.swift */,
+				E8AFFF4F1E6F15580074266E /* MustacheParser.swift */,
+				E8AFFF4E1E6F15580074266E /* MustacheNode.swift */,
+				E8AFFF501E6F15580074266E /* MustacheRenderingContext.swift */,
+				E8AFFF511E6F15580074266E /* SimpleKVC.swift */,
+				E8AFFF4D1E6F15580074266E /* HTMLEscape.swift */,
+				E8AFFF4C1E6F15580074266E /* Helpers.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -101,6 +102,7 @@
 				E896BA531E6F1047003183A8 /* Base.xcconfig */,
 				E896BA541E6F1047003183A8 /* SharedLib.xcconfig */,
 				E8C094DF1E49FA670041E7E8 /* GNUmakefile */,
+				E8AFFF4B1E6F154F0074266E /* GNUmakefile */,
 			);
 			name = Configurations;
 			sourceTree = "<group>";
@@ -217,12 +219,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E83AF9271E3E41670039F300 /* Helpers.swift in Sources */,
-				E83AF9291E3E41670039F300 /* MustacheNode.swift in Sources */,
-				E83AF92C1E3E41670039F300 /* SimpleKVC.swift in Sources */,
-				E83AF92A1E3E41670039F300 /* MustacheParser.swift in Sources */,
-				E83AF9281E3E41670039F300 /* HTMLEscape.swift in Sources */,
-				E83AF92B1E3E41670039F300 /* MustacheRenderingContext.swift in Sources */,
+				E8AFFF521E6F15580074266E /* Helpers.swift in Sources */,
+				E8AFFF541E6F15590074266E /* MustacheNode.swift in Sources */,
+				E8AFFF571E6F15590074266E /* SimpleKVC.swift in Sources */,
+				E8AFFF551E6F15590074266E /* MustacheParser.swift in Sources */,
+				E8AFFF531E6F15590074266E /* HTMLEscape.swift in Sources */,
+				E8AFFF561E6F15590074266E /* MustacheRenderingContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +301,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -314,6 +317,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -322,6 +326,7 @@
 		E8AFFF461E6F11B50074266E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Tests/mustacheTests/Info.plist;
@@ -337,6 +342,7 @@
 		E8AFFF471E6F11B50074266E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Tests/mustacheTests/Info.plist;
@@ -376,6 +382,7 @@
 				E8AFFF471E6F11B50074266E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
