@@ -112,7 +112,8 @@
 			children = (
 				E8AFFF491E6F125D0074266E /* MustacheTests.swift */,
 			);
-			path = MustacheTests;
+			name = MustacheTests;
+			path = Tests/mustacheTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
