@@ -29,7 +29,11 @@ public extension KeyValueCodingType {
 public struct KeyValueCoding {
   
   public static func value(forKeyPath p: String, inObject o: Any?) -> Any? {
-    let path = p.characters.split(separator: ".").map { String($0) }
+    #if swift(>=3.2)
+      let path = p.split(separator: ".").map(String.init)
+    #else
+      let path = p.characters.split(separator: ".").map { String($0) }
+    #endif
     var cursor = o
     for key in path {
       cursor = value(forKey: key, inObject: cursor)
