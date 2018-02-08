@@ -3,6 +3,7 @@
 if [[ "$TRAVIS_OS_NAME" == "Linux" ]]; then
     sudo apt-get install -y wget \
        clang-3.6 libc6-dev make git libicu52 libicu-dev \
+       libstdc++6 \
        git autoconf libtool pkg-config \
        libblocksruntime-dev \
        libkqueue-dev \
