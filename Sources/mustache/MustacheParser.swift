@@ -230,7 +230,7 @@ extension String {
     buf[length] = 0 // zero terminate
 
     let s = String(validatingUTF8: buf)
-    #if swift(>=4.1.50)
+    #if swift(>=4.1)
       buf.deallocate()
     #else
       buf.deallocate(capacity: buflen)
