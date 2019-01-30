@@ -250,11 +250,16 @@ class MustacheTests: XCTestCase {
   }
   
   
-#if os(Linux)
-  static var allTests = {
-    return [
-      ( "testSimpleMustacheDict", testSimpleMustacheDict ),
-    ]
-  }()
-#endif
+  static var allTests = [
+    ( "testSimpleMustacheDict", testSimpleMustacheDict ),
+    ( "testDictKVC",            testDictKVC ),
+    ( "testDictNumberKVC",      testDictNumberKVC ),
+    ( "testTreeRendering",      testTreeRendering ),
+    ( "testClassKVCRendering",  testClassKVCRendering ),
+    ( "testStructKVCRendering", testStructKVCRendering ),
+    ( "testLambda",             testLambda ),
+    ( "testSimpleLambda",       testSimpleLambda ),
+    ( "testPartialParsing",     testPartialParsing ),
+    ( "testPartial",            testPartial ),
+  ]
 }
