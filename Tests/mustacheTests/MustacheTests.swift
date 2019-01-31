@@ -250,6 +250,24 @@ class MustacheTests: XCTestCase {
   }
   
   
+  // MARK: - Swift 5 Features
+  #if swift(>=5)
+  func testDynamicallyCallableMustache() {
+    let fixTax = Mustache(fixTaxTemplate)
+    let result = fixTax(name: "Ch<r>is",
+      value       : 10000,
+      taxed_value : Int(10000 - (10000 * 0.4)),
+      in_ca       : true,
+      addresses   : [ [ "city"    : "Cupertino" ] ]
+    )
+    print("R:", result)
+    
+    XCTAssertFalse(result.isEmpty)
+    XCTAssertEqual(result, fixChrisResult)
+  }
+  #endif
+  
+  
   static var allTests = [
     ( "testSimpleMustacheDict", testSimpleMustacheDict ),
     ( "testDictKVC",            testDictKVC ),

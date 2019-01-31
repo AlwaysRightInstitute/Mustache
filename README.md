@@ -7,7 +7,7 @@
 ![tuxOS](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
 ![Travis](https://travis-ci.org/AlwaysRightInstitute/mustache.svg?branch=develop)
 
-A simple Mustache parser/evaluator for Swift.
+A simple [Mustache](http://mustache.github.io) parser/evaluator for Swift.
 
 [Mustache](http://mustache.github.io) is a very simple templating language.
 Implementations are available for pretty much any programming language
@@ -65,6 +65,50 @@ Sample code to parse and evaluate the template:
     let result = tree.render(object: sampleDict)
 
 You get the idea.
+
+## Swift 5 Dynamic Callable
+
+In Swift 5 you can expose Mustache templates as regular Swift functions.
+
+To declare a Mustache backed function:
+
+```swift
+let generateHTMLForWinner = Mustache(
+      """
+      {% raw %}Hello {{name}}
+      You have just won {{& value}} dollars!
+      {{#in_ca}}
+        Well, {{{taxed_value}}} dollars, after taxes.
+      {{/in_ca}}
+      {{#addresses}}
+        Has address in: {{city}}
+      {{/addresses}}
+      {{^addresses}}
+        Has NO addresses
+      {{/addresses}}{% endraw %}
+      """)
+```
+
+To call the function:
+
+```swift
+let winners = [
+      generateHTMLForWinner(
+        name: "Chris", value: 10000,
+        taxed_value: 6000, in_ca: true,
+        addresses: [[ "city": "Cupertino" ]]
+      ),
+      generateHTMLForWinner(
+        name: "Michael", value: 6000,
+        taxed_value: 6000, in_ca: false,
+        addresses: [[ "city": "Austin" ]]
+      )
+    ]
+```
+
+Checkout our [blog](http://www.alwaysrightinstitute.com/mustachable/)
+for more info on this.
+
 
 ### Who
 
