@@ -106,7 +106,7 @@ let winners = [
     ]
 ```
 
-Checkout our [blog](http://www.alwaysrightinstitute.com/mustachable/)
+Checkout our [blog](http://www.alwaysrightinstitute.com/mustacheable/)
 for more info on this.
 
 
