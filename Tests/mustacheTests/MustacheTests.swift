@@ -3,14 +3,14 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2020 ZeeZide GmbH. All rights reserved.
 //
 
 import XCTest
 
 @testable import mustache
 
-public class PersonClass {
+public class PersonClass: NSObject { // NSObject is required on Linux
   
   var firstname : String
   var lastname  : String
@@ -174,7 +174,7 @@ class MustacheTests: XCTestCase {
     XCTAssertEqual(result, fixTaxTemplate2)
   }
   
-  func testClassKVCRendering() {
+  func testClassKVCRendering() throws  {
     let parser = MustacheParser()
     let tree   = parser.parse(string: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
@@ -182,7 +182,7 @@ class MustacheTests: XCTestCase {
     XCTAssertEqual(result, fixFullNameKVCResults1)
   }
   
-  func testStructKVCRendering() {
+  func testStructKVCRendering() throws {
     let parser = MustacheParser()
     let tree   = parser.parse(string: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
@@ -270,14 +270,14 @@ class MustacheTests: XCTestCase {
   
   static var allTests = [
     ( "testSimpleMustacheDict", testSimpleMustacheDict ),
-    ( "testDictKVC",            testDictKVC ),
-    ( "testDictNumberKVC",      testDictNumberKVC ),
-    ( "testTreeRendering",      testTreeRendering ),
-    ( "testClassKVCRendering",  testClassKVCRendering ),
+    ( "testDictKVC"           , testDictKVC            ),
+    ( "testDictNumberKVC"     , testDictNumberKVC      ),
+    ( "testTreeRendering"     , testTreeRendering      ),
+    ( "testClassKVCRendering" , testClassKVCRendering  ),
     ( "testStructKVCRendering", testStructKVCRendering ),
-    ( "testLambda",             testLambda ),
-    ( "testSimpleLambda",       testSimpleLambda ),
-    ( "testPartialParsing",     testPartialParsing ),
-    ( "testPartial",            testPartial ),
+    ( "testLambda"            , testLambda             ),
+    ( "testSimpleLambda"      , testSimpleLambda       ),
+    ( "testPartialParsing"    , testPartialParsing     ),
+    ( "testPartial"           , testPartial            )
   ]
 }

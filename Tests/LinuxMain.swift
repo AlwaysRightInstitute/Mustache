@@ -3,5 +3,5 @@ import XCTest
 @testable import mustacheTests
 
 var tests = [XCTestCaseEntry]()
-tests += MustacheTests.allTests()
+tests += mustacheTests.allTests()
 XCTMain(tests)
