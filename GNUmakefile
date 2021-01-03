@@ -37,3 +37,31 @@ clean :
 distclean : clean
 
 endif
+
+# Docker stuff
+
+include $(PACKAGE_DIR)/xcconfig/docker.make
+
+SWIFT_SOURCES = Sources/*/*.swift
+
+$(DOCKER_BUILD_PRODUCT): $(SWIFT_SOURCES)
+	$(DOCKER) run --rm -it \
+          -v "$(PWD):/src" \
+          -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
+          "$(SWIFT_BUILD_IMAGE)" \
+          bash -c 'cd /src && swift build -c $(CONFIGURATION)'
+
+docker-all: $(DOCKER_BUILD_PRODUCT)
+
+docker-test: docker-all
+	$(DOCKER) run --rm -it \
+          -v "$(PWD):/src" \
+          -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
+          "$(SWIFT_BUILD_IMAGE)" \
+          bash -c 'cd /src && swift test -c $(CONFIGURATION)'
+
+docker-clean:
+	rm $(DOCKER_BUILD_PRODUCT)	
+	
+docker-distclean:
+	rm -rf $(DOCKER_BUILD_DIR)

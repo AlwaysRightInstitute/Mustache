@@ -102,6 +102,7 @@ SWIFT_INTERNAL_TEST_FLAGS := # $(SWIFT_INTERNAL_BUILD_FLAGS)
 # Debug or Release?
 
 ifeq ($(debug),on)
+  CONFIGURATION=debug
   APXS_EXTRA_CFLAGS  += -g
   APXS_EXTRA_LDFLAGS += -g
 
@@ -113,6 +114,7 @@ ifeq ($(debug),on)
     SWIFT_REL_BUILD_DIR=.libs
   endif
 else
+  CONFIGURATION=release
   ifeq ($(USE_SPM),yes)
     SWIFT_INTERNAL_BUILD_FLAGS += --configuration release
     SWIFT_REL_BUILD_DIR=.build/release
