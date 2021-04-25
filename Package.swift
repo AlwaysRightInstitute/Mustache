@@ -1,13 +1,15 @@
+// swift-tools-version:5.0
+
 import PackageDescription
 
 let package = Package(
   name: "mustache",
-	
-	exclude: [
-		"mustache.xcodeproj",
-		"GNUmakefile",
-		"LICENSE",
-		"README.md",
-		"xcconfig"
-	]
+  products: [
+    .library(name: "mustache", targets: ["mustache"]),
+  ],
+  dependencies: [],
+  targets: [
+    .target(name:"mustache"),
+    .testTarget(name: "mustacheTests",dependencies: ["mustache"])
+  ]
 )

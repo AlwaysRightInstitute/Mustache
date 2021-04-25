@@ -5,6 +5,6 @@
 
 #include "Base.xcconfig"
 
-MACH_O_TYPE       = mh_dylib
+// MACH_O_TYPE is empty for static
 EXECUTABLE_PREFIX = lib
 DEFINES_MODULE    = YES

@@ -3,21 +3,21 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016-2019 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
 //
 
 /// One node of the Mustache template. A template is parsed into a tree of the
 /// various nodes.
 public enum MustacheNode {
   
-  case Empty
+  case empty
   
   /// Represents the top-level node of a Mustache template, contains the list
   /// of nodes.
-  case Global([ MustacheNode])
+  case global([ MustacheNode])
   
   /// Regular CDATA in the template
-  case Text(String)
+  case text(String)
   
   /// A section, can be either a repetition (if the value evaluates to a 
   /// Sequence) or a conditional (if the value resolves to true/false).
@@ -37,7 +37,7 @@ public enum MustacheNode {
   ///       Has address in: {{city}}
   ///     {{/addresses}}
   ///
-  case Section(String, [ MustacheNode ])
+  case section(String, [ MustacheNode ])
   
   /// An inverted section either displays its contents or not, it never repeats.
   ///
@@ -53,7 +53,7 @@ public enum MustacheNode {
   ///       The person has no addresses assigned.
   ///     {{/addresses}}
   ///
-  case InvertedSection(String, [ MustacheNode ])
+  case invertedSection(String, [ MustacheNode ])
   
   /// A Mustache Variable. Will try to lookup the given string as a name in the
   /// current context. If the current context doesn't have the name, the lookup
@@ -65,7 +65,7 @@ public enum MustacheNode {
   ///
   ///     {{city}}
   ///
-  case Tag(String)
+  case tag(String)
   
   /// This is the same like Tag, but the value won't be HTML escaped.
   ///
@@ -77,7 +77,7 @@ public enum MustacheNode {
   ///
   ///     {{^ htmlToEmbed}}
   ///
-  case UnescapedTag(String)
+  case unescapedTag(String)
   
   /// A partial. How this is looked up depends on the rendering context
   /// implementation.
@@ -88,7 +88,7 @@ public enum MustacheNode {
   ///       {{> user}}
   ///     {{/names}}
   ///
-  case Partial(String)
+  case partial(String)
 }
 
 
@@ -120,23 +120,23 @@ public extension MustacheNode {
   
   func render(inContext ctx: MustacheRenderingContext) {
     switch self {
-      case .Empty: return
+      case .empty: return
       
-      case .Global(let nodes):
+      case .global(let nodes):
         render(nodes: nodes, inContext: ctx)
       
-      case .Text(let text):
+      case .text(let text):
         ctx.append(string: text)
           
-      case .Section(let tag, let nodes):
+      case .section(let tag, let nodes):
         render(section: tag, nodes: nodes, inContext: ctx)
       
-      case .InvertedSection(let tag, let nodes):
+      case .invertedSection(let tag, let nodes):
         let v = ctx.value(forTag: tag)
         guard !ctx.isMustacheTrue(value: v) else { return }
         render(nodes: nodes, inContext: ctx)
       
-      case .Tag(let tag):
+      case .tag(let tag):
         if let v = ctx.value(forTag: tag) {
           if let s = v as? String {
             ctx.append(string: ctx.escape(string: s))
@@ -146,7 +146,7 @@ public extension MustacheNode {
           }
         }
       
-      case .UnescapedTag(let tag):
+      case .unescapedTag(let tag):
         if let v = ctx.value(forTag: tag) {
           if let s = v as? String {
             ctx.append(string: s)
@@ -156,7 +156,7 @@ public extension MustacheNode {
           }
         }
       
-      case .Partial(let name):
+      case .partial(let name):
         guard let partial = ctx.retrievePartial(name: name) else { return }
         partial.render(inContext: ctx)
     }
@@ -172,10 +172,10 @@ public extension MustacheNode {
       
       let tree : MustacheNode
       if mustache == mustacheToRender { // slow, lame
-        tree = MustacheNode.Global(nl)
+        tree = MustacheNode.global(nl)
       }
       else { // got a new sub-template to render by the callback
-        let parser = MustacheParser()
+        var parser = MustacheParser()
         tree = parser.parse(string: mustache)
       }
       
@@ -194,6 +194,7 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
+  @inlinable
   var asMustacheString : String {
     var s = String()
     self.append(toString: &s)
@@ -265,46 +266,46 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
+  @inlinable
   func append(toString s : inout String) {
     switch self {
-      case .Empty: return
+      case .empty: return
       
-      case .Text(let text):
+      case .text(let text):
         s += text
       
-      case .Global(let nodes):
+      case .global(let nodes):
         nodes.forEach { $0.append(toString: &s) }
       
-      case .Section(let key, let nodes):
+      case .section(let key, let nodes):
         s += "{{#\(key)}}"
         nodes.forEach { $0.append(toString: &s) }
         s += "{{/\(key)}}"
       
-      case .InvertedSection(let key, let nodes):
+      case .invertedSection(let key, let nodes):
         s += "{{^\(key)}}"
         nodes.forEach { $0.append(toString: &s) }
         s += "{{/\(key)}}"
       
-      case .Tag(let key):
+      case .tag(let key):
         s += "{{\(key)}}"
       
-      case .UnescapedTag(let key):
+      case .unescapedTag(let key):
         s += "{{{\(key)}}}"
       
-      case .Partial(let key):
+      case .partial(let key):
         s += "{{> \(key)}}"
     }
   }
-
 }
 
 
 public extension Sequence where Iterator.Element == MustacheNode {
 
+  @inlinable
   var asMustacheString : String {
     var s = String()
     forEach { $0.append(toString: &s) }
     return s
   }
-  
 }
