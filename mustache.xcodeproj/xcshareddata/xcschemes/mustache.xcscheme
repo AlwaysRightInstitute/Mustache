@@ -15,8 +15,22 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-               BuildableName = "libmustache.dylib"
-               BlueprintName = "mustache"
+               BuildableName = "libMustache.dylib"
+               BlueprintName = "Mustache"
+               ReferencedContainer = "container:mustache.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E8AFFF3D1E6F11B50074266E"
+               BuildableName = "MustacheTests.xctest"
+               BlueprintName = "MustacheTests"
                ReferencedContainer = "container:mustache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libmustache.dylib"
-            BlueprintName = "mustache"
+            BuildableName = "libMustache.dylib"
+            BlueprintName = "Mustache"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -51,7 +65,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -64,8 +78,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libmustache.dylib"
-            BlueprintName = "mustache"
+            BuildableName = "libMustache.dylib"
+            BlueprintName = "Mustache"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -80,8 +94,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libmustache.dylib"
-            BlueprintName = "mustache"
+            BuildableName = "libMustache.dylib"
+            BlueprintName = "Mustache"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
