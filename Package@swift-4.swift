@@ -3,10 +3,9 @@
 import PackageDescription
 
 let package = Package(
-  name: "mustache",
+  name: "Mustache",
   products: [
-    .library(name: "mustache", targets: ["mustache"]),
+    .library(name: "Mustache", targets: [ "Mustache" ])
   ],
-  dependencies: [],
-  targets: [ .target(name:"mustache") ]
+  targets: [ .target(name: "Mustache") ]
 )
