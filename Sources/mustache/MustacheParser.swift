@@ -56,13 +56,13 @@ public struct MustacheParser {
   }
   
   public mutating func parse(cstr cs: UnsafePointer<CChar>) -> MustacheNode {
-    if cs.pointee == 0 { return .Empty }
+    if cs.pointee == 0 { return .empty }
     
     start = cs
     p     = start
     
-    guard let nodes = parseNodes() else { return .Empty }
-    return .Global(nodes)
+    guard let nodes = parseNodes() else { return .empty }
+    return .global(nodes)
   }
   
   
@@ -77,7 +77,7 @@ public struct MustacheParser {
     
     while let node = parseNode(sectionEnd: s) {
       switch node {
-        case .Empty: continue
+        case .empty: continue
         default: break
       }
       
@@ -92,18 +92,18 @@ public struct MustacheParser {
     guard let token = parseTagOrText() else { return nil }
     
     switch token {
-      case .Text        (let s): return .Text(s)
-      case .Tag         (let s): return .Tag(s)
-      case .UnescapedTag(let s): return .UnescapedTag(s)
-      case .Partial     (let s): return .Partial(s)
+      case .Text        (let s): return .text(s)
+      case .Tag         (let s): return .tag(s)
+      case .UnescapedTag(let s): return .unescapedTag(s)
+      case .Partial     (let s): return .partial(s)
       
       case .SectionStart(let s):
-        guard let children = parseNodes(section: s) else { return .Empty }
-        return .Section(s, children)
+        guard let children = parseNodes(section: s) else { return .empty }
+        return .section(s, children)
       
       case .InvertedSectionStart(let s):
-        guard let children = parseNodes(section: s) else { return .Empty }
-        return .InvertedSection(s, children)
+        guard let children = parseNodes(section: s) else { return .empty }
+        return .invertedSection(s, children)
       
       case .SectionEnd(let s):
         if !s.isEmpty && s != se {
