@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E8C321552635A83F001E3EC8"
-               BuildableName = "libMustacheStatic.a"
+               BuildableName = "libMustache.a"
                BlueprintName = "MustacheStatic"
                ReferencedContainer = "container:mustache.xcodeproj">
             </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E8C321552635A83F001E3EC8"
-            BuildableName = "libMustacheStatic.a"
+            BuildableName = "libMustache.a"
             BlueprintName = "MustacheStatic"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>

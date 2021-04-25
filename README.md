@@ -59,7 +59,7 @@ Sample code to parse and evaluate the template:
       ]
     ]
     
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: template)
     let result = tree.render(object: sampleDict)
 
@@ -73,36 +73,37 @@ To declare a Mustache backed function:
 
 ```swift
 let generateHTMLForWinner = Mustache(
-      """
-      {% raw %}Hello {{name}}
-      You have just won {{& value}} dollars!
-      {{#in_ca}}
+    """
+    {% raw %}Hello {{name}}
+    You have just won {{& value}} dollars!
+    {{#in_ca}}
         Well, {{{taxed_value}}} dollars, after taxes.
-      {{/in_ca}}
-      {{#addresses}}
+    {{/in_ca}}
+    {{#addresses}}
         Has address in: {{city}}
-      {{/addresses}}
-      {{^addresses}}
+    {{/addresses}}
+    {{^addresses}}
         Has NO addresses
-      {{/addresses}}{% endraw %}
-      """)
+    {{/addresses}}{% endraw %}
+    """
+)
 ```
 
 To call the function:
 
 ```swift
 let winners = [
-      generateHTMLForWinner(
+    generateHTMLForWinner(
         name: "Chris", value: 10000,
         taxed_value: 6000, in_ca: true,
         addresses: [[ "city": "Cupertino" ]]
-      ),
-      generateHTMLForWinner(
+    ),
+    generateHTMLForWinner(
         name: "Michael", value: 6000,
         taxed_value: 6000, in_ca: false,
         addresses: [[ "city": "Austin" ]]
-      )
-    ]
+    )
+]
 ```
 
 Checkout our [blog](http://www.alwaysrightinstitute.com/mustachable/)
