@@ -4,7 +4,7 @@
 ![Swift5](https://img.shields.io/badge/swift-5-blue.svg)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![tuxOS](https://img.shields.io/badge/os-tuxOS-green.svg?style=flat)
-![Travis](https://travis-ci.org/AlwaysRightInstitute/mustache.svg?branch=develop)
+[![Build and Test](https://github.com/AlwaysRightInstitute/Mustache/actions/workflows/swift.yml/badge.svg?branch=main)](https://github.com/AlwaysRightInstitute/Mustache/actions/workflows/swift.yml)
 
 A simple [Mustache](http://mustache.github.io) parser/evaluator for Swift.
 
