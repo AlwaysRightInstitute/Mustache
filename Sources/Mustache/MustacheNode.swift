@@ -92,103 +92,6 @@ public enum MustacheNode {
 }
 
 
-// MARK: - Rendering
-
-public extension MustacheNode {
-  
-  func render(object o: Any?, cb: ( String ) -> Void) {
-    let ctx = MustacheDefaultRenderingContext(o)
-    render(inContext: ctx, cb: cb)
-  }
-  
-  func render(object o: Any?) -> String {
-    let ctx = MustacheDefaultRenderingContext(o)
-    render(inContext: ctx)
-    return ctx.string
-  }
-  
-  func render(nodes     nl  : [MustacheNode],
-              inContext ctx : MustacheRenderingContext)
-  {
-    nl.forEach { node in node.render(inContext: ctx) }
-  }
-  
-  func render(inContext ctx: MustacheRenderingContext, cb: ( String ) -> Void) {
-    render(inContext: ctx) // TODO: make async for partials
-    cb(ctx.string)
-  }
-  
-  func render(inContext ctx: MustacheRenderingContext) {
-    switch self {
-      case .empty: return
-      
-      case .global(let nodes):
-        render(nodes: nodes, inContext: ctx)
-      
-      case .text(let text):
-        ctx.append(string: text)
-          
-      case .section(let tag, let nodes):
-        render(section: tag, nodes: nodes, inContext: ctx)
-      
-      case .invertedSection(let tag, let nodes):
-        let v = ctx.value(forTag: tag)
-        guard !ctx.isMustacheTrue(value: v) else { return }
-        render(nodes: nodes, inContext: ctx)
-      
-      case .tag(let tag):
-        if let v = ctx.value(forTag: tag) {
-          if let s = v as? String {
-            ctx.append(string: ctx.escape(string: s))
-          }
-          else {
-            ctx.append(string: ctx.escape(string: "\(v)"))
-          }
-        }
-      
-      case .unescapedTag(let tag):
-        if let v = ctx.value(forTag: tag) {
-          if let s = v as? String {
-            ctx.append(string: s)
-          }
-          else {
-            ctx.append(string: "\(v)")
-          }
-        }
-      
-      case .partial(let name):
-        guard let partial = ctx.retrievePartial(name: name) else { return }
-        partial.render(inContext: ctx)
-    }
-  }
-  
-  func render(lambda    cb  : MustacheRenderingFunction,
-              nodes     nl  : [ MustacheNode ],
-              inContext ctx : MustacheRenderingContext)
-  {
-    let mustache = nl.asMustacheString
-    let result = cb(mustache) {
-      mustacheToRender in
-      
-      let tree : MustacheNode
-      if mustache == mustacheToRender { // slow, lame
-        tree = MustacheNode.global(nl)
-      }
-      else { // got a new sub-template to render by the callback
-        var parser = MustacheParser()
-        tree = parser.parse(string: mustache)
-      }
-      
-      let lambdaCtx = ctx.newLambdaContext()
-      
-      tree.render(inContext: lambdaCtx)
-      
-      return lambdaCtx.string
-    }
-    ctx.append(string: result)
-  }
-}
-
 
 // MARK: - Convert parsed nodes back to a String template
 
@@ -201,68 +104,6 @@ public extension MustacheNode {
     return s
   }
 }
-
-public extension MustacheNode {
-  
-  func render(section tag: String, nodes : [ MustacheNode ],
-              inContext ctx: MustacheRenderingContext)
-  {
-    let v = ctx.value(forTag: tag)
-    guard let vv = v else { return } // nil
-    
-    // Is it a rendering function?
-
-    if let cb = v as? MustacheRenderingFunction {
-      render(lambda: cb, nodes: nodes, inContext: ctx)
-      return
-    }
-    else if let cb = vv as? MustacheSimpleRenderingFunction {
-      render(lambda: { text, _ in return cb(text) },
-             nodes: nodes, inContext: ctx)
-    }
-  
-    // Is it a plain false?
-    
-    guard ctx.isMustacheTrue(value: vv) else { return }
-    
-    // Reflect on section value
-    
-    let mirror = Mirror(reflecting: vv)
-    let ds     = mirror.displayStyle
-    
-    if ds == nil { // e.g. Bool in Swift 3
-      render(nodes: nodes, inContext: ctx)
-      return
-    }
-    
-    switch ds! {
-      case .collection:
-        for ( _, value ) in mirror.children {
-          ctx.enter(scope: value)
-          render(nodes: nodes, inContext: ctx)
-          ctx.leave()
-        }
-
-      case .class, .dictionary: // adjust cursor
-        if ctx.isFoundationBaseType(value: vv) {
-          render(nodes: nodes, inContext: ctx)
-        }
-        else {
-          ctx.enter(scope: vv)
-          render(nodes: nodes, inContext: ctx)
-          ctx.leave()
-        }
-      
-      default:
-        // keep cursor for non-collections?
-        render(nodes: nodes, inContext: ctx)
-    }
-  }
-  
-}
-
-
-// MARK: - Convert parsed nodes back to a String template
 
 public extension MustacheNode {
   
@@ -299,7 +140,6 @@ public extension MustacheNode {
   }
 }
 
-
 public extension Sequence where Iterator.Element == MustacheNode {
 
   @inlinable
@@ -307,5 +147,63 @@ public extension Sequence where Iterator.Element == MustacheNode {
     var s = String()
     forEach { $0.append(toString: &s) }
     return s
+  }
+}
+
+
+// MARK: - Template Reflection
+
+public extension MustacheNode {
+  
+  @inlinable
+  var hasKeys: Bool {
+    switch self {
+      case .empty, .text: return false
+      case .section, .invertedSection, .tag, .unescapedTag: return true
+      case .global(let nodes):
+        return nodes.firstIndex(where: { $0.hasKeys }) != nil
+      case .partial: return true
+    }
+  }
+  
+  @usableFromInline
+  internal func addKeys(to set: inout Set<String>) {
+    switch self {
+      case .empty, .text: return
+      case .global(let nodes): nodes.forEach { $0.addKeys(to: &set) }
+      case .section(let key, let nodes), .invertedSection(let key, let nodes):
+        set.insert(key)
+        nodes.forEach { $0.addKeys(to: &set) }
+      case .tag(let key), .unescapedTag(let key):
+        set.insert(key)
+      case .partial:
+        return
+    }
+  }
+  
+  @inlinable
+  var keys : Set<String> {
+    var set = Set<String>()
+    addKeys(to: &set)
+    return set
+  }
+}
+
+public extension Sequence where Element == MustacheNode {
+  
+  @inlinable
+  var keys : Set<String> {
+    var set = Set<String>()
+    forEach { $0.addKeys(to: &set) }
+    return set
+  }
+}
+public extension Collection where Element == MustacheNode {
+  
+  @inlinable
+  var keys : Set<String> {
+    var set = Set<String>()
+    forEach { $0.addKeys(to: &set) }
+    return set
   }
 }
