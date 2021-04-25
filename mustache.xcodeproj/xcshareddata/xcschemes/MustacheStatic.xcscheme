@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-               BuildableName = "libMustache.dylib"
-               BlueprintName = "Mustache"
+               BlueprintIdentifier = "E8C321552635A83F001E3EC8"
+               BuildableName = "libMustacheStatic.a"
+               BlueprintName = "MustacheStatic"
                ReferencedContainer = "container:mustache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,28 +40,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      systemAttachmentLifetime = "keepNever">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libMustache.dylib"
-            BlueprintName = "Mustache"
-            ReferencedContainer = "container:mustache.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E8AFFF3D1E6F11B50074266E"
-               BuildableName = "MustacheTests.xctest"
-               BlueprintName = "MustacheTests"
-               ReferencedContainer = "container:mustache.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -74,15 +54,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libMustache.dylib"
-            BlueprintName = "Mustache"
-            ReferencedContainer = "container:mustache.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -93,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E83AF8F71E3E40500039F300"
-            BuildableName = "libMustache.dylib"
-            BlueprintName = "Mustache"
+            BlueprintIdentifier = "E8C321552635A83F001E3EC8"
+            BuildableName = "libMustacheStatic.a"
+            BlueprintName = "MustacheStatic"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

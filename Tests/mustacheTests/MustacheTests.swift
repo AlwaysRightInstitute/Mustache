@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import mustache
+@testable import Mustache
 
 public class PersonClass: NSObject { // NSObject is required on Linux
   
