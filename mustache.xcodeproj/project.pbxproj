@@ -21,6 +21,8 @@
 		E8C3215D2635A91E001E3EC8 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4C1E6F15580074266E /* Helpers.swift */; };
 		E8C3215E2635A91E001E3EC8 /* MustacheNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF4E1E6F15580074266E /* MustacheNode.swift */; };
 		E8C3215F2635A91E001E3EC8 /* MustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF501E6F15580074266E /* MustacheRenderingContext.swift */; };
+		E8C321612635AC3A001E3EC8 /* Mustachable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C321602635AC3A001E3EC8 /* Mustachable.swift */; };
+		E8C321622635AC3A001E3EC8 /* Mustachable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C321602635AC3A001E3EC8 /* Mustachable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,7 @@
 		E8C094DF1E49FA670041E7E8 /* GNUmakefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = GNUmakefile; sourceTree = "<group>"; };
 		E8C321512635A810001E3EC8 /* StaticLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = StaticLib.xcconfig; path = xcconfig/StaticLib.xcconfig; sourceTree = "<group>"; };
 		E8C321562635A83F001E3EC8 /* libMustache.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMustache.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8C321602635AC3A001E3EC8 /* Mustachable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Mustachable.swift; path = Sources/mustache/Mustachable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +105,7 @@
 		E83AF91F1E3E41570039F300 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E8C321602635AC3A001E3EC8 /* Mustachable.swift */,
 				E8AFFF4F1E6F15580074266E /* MustacheParser.swift */,
 				E8AFFF4E1E6F15580074266E /* MustacheNode.swift */,
 				E8AFFF501E6F15580074266E /* MustacheRenderingContext.swift */,
@@ -272,6 +276,7 @@
 				E8AFFF551E6F15590074266E /* MustacheParser.swift in Sources */,
 				E8AFFF531E6F15590074266E /* HTMLEscape.swift in Sources */,
 				E8AFFF561E6F15590074266E /* MustacheRenderingContext.swift in Sources */,
+				E8C321612635AC3A001E3EC8 /* Mustachable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +298,7 @@
 				E8C3215E2635A91E001E3EC8 /* MustacheNode.swift in Sources */,
 				E8C3215C2635A91E001E3EC8 /* MustacheParser.swift in Sources */,
 				E8C3215D2635A91E001E3EC8 /* Helpers.swift in Sources */,
+				E8C321622635AC3A001E3EC8 /* Mustachable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
