@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016-2019 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
 //
 
 /// One node of the Mustache template. A template is parsed into a tree of the
@@ -175,7 +175,7 @@ public extension MustacheNode {
         tree = MustacheNode.Global(nl)
       }
       else { // got a new sub-template to render by the callback
-        let parser = MustacheParser()
+        var parser = MustacheParser()
         tree = parser.parse(string: mustache)
       }
       
@@ -194,6 +194,7 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
+  @inlinable
   var asMustacheString : String {
     var s = String()
     self.append(toString: &s)
@@ -265,6 +266,7 @@ public extension MustacheNode {
 
 public extension MustacheNode {
   
+  @inlinable
   func append(toString s : inout String) {
     switch self {
       case .Empty: return
@@ -301,10 +303,10 @@ public extension MustacheNode {
 
 public extension Sequence where Iterator.Element == MustacheNode {
 
+  @inlinable
   var asMustacheString : String {
     var s = String()
     forEach { $0.append(toString: &s) }
     return s
   }
-  
 }

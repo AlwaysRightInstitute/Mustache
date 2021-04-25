@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016-2020 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
 //
 
 import XCTest
@@ -158,7 +158,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testSimpleMustacheDict() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixTaxTemplate)
     let result = tree.render(object: fixDictChris)
     
@@ -167,7 +167,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testTreeRendering() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixTaxTemplate2)
     let result = tree.asMustacheString
     
@@ -175,7 +175,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testClassKVCRendering() throws  {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
     
@@ -183,7 +183,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testStructKVCRendering() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
     
@@ -191,7 +191,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testLambda() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixLambdaTemplate1)
     let result = tree.render(object: fixLambda1)
     
@@ -200,7 +200,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testSimpleLambda() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: fixLambdaTemplate1)
     let result = tree.render(object: fixSimpleLambda1)
     
@@ -209,7 +209,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testPartialParsing() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: baseTemplate)
     
     XCTAssertNotNil(tree)
@@ -227,7 +227,7 @@ class MustacheTests: XCTestCase {
     override func retrievePartial(name n: String) -> MustacheNode? {
       guard let template = nameToTemplate[n] else { return nil }
       
-      let parser = MustacheParser()
+      var parser = MustacheParser()
       let tree   = parser.parse(string: template)
       return tree
     }
@@ -235,7 +235,7 @@ class MustacheTests: XCTestCase {
   }
   
   func testPartial() throws {
-    let parser = MustacheParser()
+    var parser = MustacheParser()
     let tree   = parser.parse(string: baseTemplate)
 
     let ctx = TestCtx(["names": fixUsers])
@@ -251,8 +251,8 @@ class MustacheTests: XCTestCase {
   
   
   // MARK: - Swift 5 Features
-  #if swift(>=5)
   func testDynamicallyCallableMustache() {
+    #if swift(>=5)
     let fixTax = Mustache(fixTaxTemplate)
     let result = fixTax(name: "Ch<r>is",
       value       : 10000,
@@ -264,8 +264,8 @@ class MustacheTests: XCTestCase {
     
     XCTAssertFalse(result.isEmpty)
     XCTAssertEqual(result, fixChrisResult)
+    #endif
   }
-  #endif
   
   
   static var allTests = [
