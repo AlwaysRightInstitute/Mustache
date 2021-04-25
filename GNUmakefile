@@ -38,14 +38,22 @@ distclean : clean
 
 endif
 
+
 # Docker stuff
 
-include $(PACKAGE_DIR)/xcconfig/docker.make
+# docker config
+DOCKER_BUILD_DIR=".docker.build"
+#SWIFT_BUILD_IMAGE="swift:5.1.3"
+#SWIFT_BUILD_IMAGE="swift:5.0.3"
+SWIFT_BUILD_IMAGE="helje5/arm64v8-swift-dev:latest"
+SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/aarch64-unknown-linux/$(CONFIGURATION)"
+#SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/x86_64-unknown-linux/$(CONFIGURATION)"
+DOCKER_BUILD_PRODUCT="$(DOCKER_BUILD_DIR)/$(TOOL_NAME)"
 
 SWIFT_SOURCES = Sources/*/*.swift
 
 $(DOCKER_BUILD_PRODUCT): $(SWIFT_SOURCES)
-	$(DOCKER) run --rm -it \
+	docker run --rm \
           -v "$(PWD):/src" \
           -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
           "$(SWIFT_BUILD_IMAGE)" \
@@ -54,7 +62,7 @@ $(DOCKER_BUILD_PRODUCT): $(SWIFT_SOURCES)
 docker-all: $(DOCKER_BUILD_PRODUCT)
 
 docker-test: docker-all
-	$(DOCKER) run --rm -it \
+	docker run --rm \
           -v "$(PWD):/src" \
           -v "$(PWD)/$(DOCKER_BUILD_DIR):/src/.build" \
           "$(SWIFT_BUILD_IMAGE)" \
