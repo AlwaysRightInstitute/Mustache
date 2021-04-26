@@ -79,14 +79,11 @@ class AttributedMustacheTests: XCTestCase {
   ]
   
   let fixChrisResult =
-    "Hello Chris\n" +
+    "Hello Ch<r>is\n" +
     "You have just won 10000 dollars!\n" +
     "\n" +
-    "Well, 6000 dollars, after taxes." +
-    "\n" +
-    "" +
-    "  Has address in: Cupertino" +
-    "" +
+    "Well, 6000 dollars, after taxes.\n" +
+    "  Has address in: Cupertino\n" +
   ""
   
   let fixFullNameKVCTemplate1 = NSAttributedString(string:
@@ -184,7 +181,7 @@ class AttributedMustacheTests: XCTestCase {
     XCTAssertNotEqual(tree, .empty)
     
     let result = tree.render(object: fixDictChris)
-    
+
     XCTAssertFalse(result.length == 0)
     XCTAssertEqual(result.string, fixChrisResult)
   }
