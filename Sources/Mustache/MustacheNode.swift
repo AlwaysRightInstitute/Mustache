@@ -8,7 +8,7 @@
 
 /// One node of the Mustache template. A template is parsed into a tree of the
 /// various nodes.
-public enum MustacheNode {
+public enum MustacheNode: Equatable {
   
   case empty
   
