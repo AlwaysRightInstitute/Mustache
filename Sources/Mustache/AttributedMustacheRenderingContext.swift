@@ -21,8 +21,8 @@ public protocol AttributedMustacheRenderingContext {
   
   // MARK: - Content Generation
   
-  var string : NSMutableAttributedString { get }
-  func append(string s: NSAttributedString)
+  var  attributedString : NSMutableAttributedString { get }
+  func append(_ s: NSAttributedString)
 
   // MARK: - Cursor
   
@@ -58,8 +58,8 @@ open class AttributedMustacheDefaultRenderingContext
            : AttributedMustacheRenderingContext
 {
   
-  public let string = NSMutableAttributedString()
-  public var stack  = [ Any? ]() // #linux-public
+  public let attributedString = NSMutableAttributedString()
+  public var stack            = [ Any? ]() // #linux-public
   
   public init(_ root: Any?) {
     if let a = root {
@@ -73,8 +73,8 @@ open class AttributedMustacheDefaultRenderingContext
   
   // MARK: - Content Generation
   
-  public func append(string s: NSAttributedString) {
-    string.append(s)
+  public func append(_ s: NSAttributedString) {
+    attributedString.append(s)
   }
   
   

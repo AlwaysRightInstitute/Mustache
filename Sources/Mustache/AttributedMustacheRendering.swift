@@ -31,7 +31,7 @@ public extension AttributedMustacheNode {
   func render(object o: Any?) -> NSAttributedString {
     let ctx = AttributedMustacheDefaultRenderingContext(o)
     render(inContext: ctx)
-    return ctx.string
+    return ctx.attributedString
   }
   
   func render(nodes     nl  : [ AttributedMustacheNode ],
@@ -44,7 +44,7 @@ public extension AttributedMustacheNode {
               cb: ( NSAttributedString ) -> Void)
   {
     render(inContext: ctx) // TODO: make async for partials
-    cb(ctx.string)
+    cb(ctx.attributedString)
   }
   
   func render(inContext ctx: AttributedMustacheRenderingContext) {
@@ -55,7 +55,7 @@ public extension AttributedMustacheNode {
         render(nodes: nodes, inContext: ctx)
       
       case .text(let text):
-        ctx.append(string: text)
+        ctx.append(text)
           
       case .section(let tag, let nodes):
         render(section: tag, nodes: nodes, inContext: ctx)
@@ -95,7 +95,7 @@ public extension AttributedMustacheNode {
               return NSAttributedString(string: s, attributes: attributes)
           }
         }()
-        ctx.append(string: content)
+        ctx.append(content)
 
       case .partial(let name):
         guard let partial = ctx.retrievePartial(name: name) else { return }
@@ -124,9 +124,37 @@ public extension AttributedMustacheNode {
       
       tree.render(inContext: lambdaCtx)
       
-      return lambdaCtx.string
+      return lambdaCtx.attributedString
     }
-    ctx.append(string: result)
+    ctx.append(result)
+  }
+
+  func render(lambda    cb  : MustacheRenderingFunction,
+              nodes     nl  : [ AttributedMustacheNode ],
+              inContext ctx : AttributedMustacheRenderingContext)
+  {
+    // TODO: this should preserve the attributes of the lambda context
+    let mustache = nl.asMustacheString
+    let result = cb(mustache) {
+      mustacheToRender in
+      
+      let tree : AttributedMustacheNode
+      if mustache == mustacheToRender { // slow, lame
+        tree = AttributedMustacheNode.global(nl)
+      }
+      else { // got a new sub-template to render by the callback
+        var parser = AttributedMustacheParser()
+        tree = parser.parse(attributedString:
+                                NSAttributedString(string: mustache))
+      }
+      
+      let lambdaCtx = ctx.newLambdaContext()
+      
+      tree.render(inContext: lambdaCtx)
+      
+      return lambdaCtx.attributedString.string
+    }
+    ctx.append(NSAttributedString(string: result))
   }
 }
 
@@ -148,7 +176,15 @@ public extension AttributedMustacheNode {
       render(lambda: { text, _ in return cb(text) },
              nodes: nodes, inContext: ctx)
     }
-  
+    else if let cb = v as? MustacheRenderingFunction {
+      render(lambda: cb, nodes: nodes, inContext: ctx)
+      return
+    }
+    else if let cb = vv as? MustacheSimpleRenderingFunction {
+      render(lambda: { text, _ in return cb(text) },
+             nodes: nodes, inContext: ctx)
+    }
+
     // Is it a plain false?
     
     guard isMustacheTrue(value: vv) else { return }

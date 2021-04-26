@@ -145,14 +145,6 @@ class AttributedMustacheTests: XCTestCase {
       return
     }
     
-    /*
-    Hello {{name}}
-    You have just won {{& value}} dollars!
-    {{#in_ca}}
-    Well, {{{taxed_value}}} dollars, after taxes.{{/in_ca}}
-    {{#addresses}}  Has address in: {{city}}{{/addresses}}
-    {{^addresses}}Has NO addresses{{/addresses}}
- */
     XCTAssertEqual(nodes.count, 10)
     if nodes.count > 0 { let node = nodes[0]
       XCTAssertEqual(node, .text(NSAttributedString(string: "Hello ")))
@@ -233,8 +225,40 @@ class AttributedMustacheTests: XCTestCase {
   func testSimpleLambda() throws {
     var parser = AttributedMustacheParser()
     let tree   = parser.parse(attributedString: fixLambdaTemplate1)
-    let result = tree.render(object: fixSimpleLambda1)
     
+    guard case .global(let nodes) = tree else {
+      XCTAssert(false, "expected global")
+      return
+    }
+    XCTAssertEqual(nodes.count, 1)
+    
+    guard case .section(let name, let snodes) = nodes.first else {
+      XCTAssert(false, "expected section")
+      return
+    }
+    XCTAssertEqual(snodes.count, 2)
+    XCTAssertEqual(name, "wrapped")
+
+    guard case .tag(let tagName) = snodes.first else {
+      XCTAssert(false, "expected tag")
+      return
+    }
+    XCTAssertEqual(tagName.string, "name")
+    
+    let s = tree.asMustacheString
+    print("S:\n---\n\(s)\n---")
+
+    let result = tree.render(object: fixSimpleLambda1)
+
+    /*
+     let fixLambdaTemplate1 = NSAttributedString(string:
+       "{{#wrapped}}{{name}} is awesome.{{/wrapped}}")
+    let fixSimpleLambda1 : [ String : Any ] = [
+      "name"    : "Willy",
+      "wrapped" : { ( text: String ) -> String in return "<b>" + text + "</b>" }
+    ]
+    let fixSimpleLambda1Result = "<b>{{name}} is awesome.</b>"
+ */
     XCTAssert(result.length > 0)
     XCTAssertEqual(result.string, fixSimpleLambda1Result)
   }
@@ -273,7 +297,7 @@ class AttributedMustacheTests: XCTestCase {
     ctx.nameToTemplate["base"] = baseTemplate
     ctx.nameToTemplate["user"] = userTemplate
     tree.render(inContext: ctx)
-    let result = ctx.string
+    let result = ctx.attributedString
     
     //print("result: \(result)")
     XCTAssertNotNil(result)

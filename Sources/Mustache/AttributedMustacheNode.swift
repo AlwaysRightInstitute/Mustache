@@ -127,23 +127,23 @@ public extension AttributedMustacheNode {
         nodes.forEach { $0.append(toString: &s) }
       
       case .section(let key, let nodes):
-        s += "{{#\(key)}}"
+        s += "{{#" + key + "}}"
         nodes.forEach { $0.append(toString: &s) }
-        s += "{{/\(key)}}"
+        s += "{{/" + key + "}}"
       
       case .invertedSection(let key, let nodes):
-        s += "{{^\(key)}}"
+        s += "{{^" + key + "}}"
         nodes.forEach { $0.append(toString: &s) }
-        s += "{{/\(key)}}"
+        s += "{{/" + key + "}}"
+
+      case .tag(let attributedKey):
+        s += "{{" + attributedKey.string + "}}"
       
-      case .tag(let key):
-        s += "{{\(key)}}"
-      
-      case .unescapedTag(let key):
-        s += "{{{\(key)}}}"
+      case .unescapedTag(let attributedKey):
+        s += "{{{" + attributedKey.string + "}}}"
       
       case .partial(let key):
-        s += "{{> \(key)}}"
+        s += "{{> " + key + "}}"
     }
   }
 
