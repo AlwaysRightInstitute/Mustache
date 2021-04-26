@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E865CE3C2636EBB3008F71E2 /* AttributedMustacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865CE3B2636EBB3008F71E2 /* AttributedMustacheTests.swift */; };
+		E865CE3E2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865CE3D2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift */; };
+		E865CE3F2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865CE3D2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift */; };
+		E865CE412636EFE6008F71E2 /* AttributedMustacheRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865CE402636EFE6008F71E2 /* AttributedMustacheRendering.swift */; };
+		E865CE422636EFE6008F71E2 /* AttributedMustacheRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865CE402636EFE6008F71E2 /* AttributedMustacheRendering.swift */; };
 		E8AFFF431E6F11B50074266E /* libMustache.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E83AF8F81E3E40500039F300 /* libMustache.dylib */; };
 		E8AFFF4A1E6F125D0074266E /* MustacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AFFF491E6F125D0074266E /* MustacheTests.swift */; };
 		E8C321742635B92D001E3EC8 /* MustacheRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C3216C2635B92D001E3EC8 /* MustacheRendering.swift */; };
@@ -44,6 +49,9 @@
 /* Begin PBXFileReference section */
 		E83AF8F81E3E40500039F300 /* libMustache.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMustache.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		E83AF9201E3E415E0039F300 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E865CE3B2636EBB3008F71E2 /* AttributedMustacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AttributedMustacheTests.swift; path = Tests/MustacheTests/AttributedMustacheTests.swift; sourceTree = SOURCE_ROOT; };
+		E865CE3D2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedMustacheRenderingContext.swift; sourceTree = "<group>"; };
+		E865CE402636EFE6008F71E2 /* AttributedMustacheRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedMustacheRendering.swift; sourceTree = "<group>"; };
 		E896BA531E6F1047003183A8 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Base.xcconfig; path = xcconfig/Base.xcconfig; sourceTree = "<group>"; };
 		E896BA541E6F1047003183A8 /* SharedLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SharedLib.xcconfig; path = xcconfig/SharedLib.xcconfig; sourceTree = "<group>"; };
 		E8AFFF3E1E6F11B50074266E /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +128,8 @@
 				E8C3216D2635B92D001E3EC8 /* MustacheRenderingContext.swift */,
 				E8DEDDC82635BBB300494E3E /* AttributedMustacheNode.swift */,
 				E8DEDDC72635BBB300494E3E /* AttributedMustacheParser.swift */,
+				E865CE402636EFE6008F71E2 /* AttributedMustacheRendering.swift */,
+				E865CE3D2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift */,
 				E8C321722635B92D001E3EC8 /* HTMLEscape.swift */,
 				E8C3216F2635B92D001E3EC8 /* SimpleKVC.swift */,
 				E8C321732635B92D001E3EC8 /* Helpers.swift */,
@@ -143,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				E8AFFF491E6F125D0074266E /* MustacheTests.swift */,
+				E865CE3B2636EBB3008F71E2 /* AttributedMustacheTests.swift */,
 			);
 			name = MustacheTests;
 			path = Tests/mustacheTests;
@@ -247,7 +258,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E83AF8F31E3E40500039F300 /* Build configuration list for PBXProject "Mustache" */;
+			buildConfigurationList = E83AF8F31E3E40500039F300 /* Build configuration list for PBXProject "mustache" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -286,8 +297,10 @@
 				E8C321762635B92D001E3EC8 /* MustacheRenderingContext.swift in Sources */,
 				E8DEDDC92635BBB400494E3E /* AttributedMustacheParser.swift in Sources */,
 				E8C3217E2635B92D001E3EC8 /* MustacheParser.swift in Sources */,
+				E865CE412636EFE6008F71E2 /* AttributedMustacheRendering.swift in Sources */,
 				E8C321822635B92D001E3EC8 /* Helpers.swift in Sources */,
 				E8DEDDCB2635BBB400494E3E /* AttributedMustacheNode.swift in Sources */,
+				E865CE3E2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift in Sources */,
 				E8C3217C2635B92D001E3EC8 /* Mustachable.swift in Sources */,
 				E8C321782635B92D001E3EC8 /* MustacheNode.swift in Sources */,
 				E8C321802635B92D001E3EC8 /* HTMLEscape.swift in Sources */,
@@ -300,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8AFFF4A1E6F125D0074266E /* MustacheTests.swift in Sources */,
+				E865CE3C2636EBB3008F71E2 /* AttributedMustacheTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,8 +325,10 @@
 				E8C321772635B92D001E3EC8 /* MustacheRenderingContext.swift in Sources */,
 				E8DEDDCA2635BBB400494E3E /* AttributedMustacheParser.swift in Sources */,
 				E8C3217F2635B92D001E3EC8 /* MustacheParser.swift in Sources */,
+				E865CE422636EFE6008F71E2 /* AttributedMustacheRendering.swift in Sources */,
 				E8C321832635B92D001E3EC8 /* Helpers.swift in Sources */,
 				E8DEDDCC2635BBB400494E3E /* AttributedMustacheNode.swift in Sources */,
+				E865CE3F2636EEAD008F71E2 /* AttributedMustacheRenderingContext.swift in Sources */,
 				E8C3217D2635B92D001E3EC8 /* Mustachable.swift in Sources */,
 				E8C321792635B92D001E3EC8 /* MustacheNode.swift in Sources */,
 				E8C321812635B92D001E3EC8 /* HTMLEscape.swift in Sources */,
@@ -439,7 +455,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E83AF8F31E3E40500039F300 /* Build configuration list for PBXProject "Mustache" */ = {
+		E83AF8F31E3E40500039F300 /* Build configuration list for PBXProject "mustache" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E83AF8FA1E3E40500039F300 /* Debug */,
