@@ -153,7 +153,8 @@ public struct AttributedMustacheParser {
         // found end
         let endCursor = cursor
         var contentRange : NSRange { // Intentionally dynamic
-          NSRange(location: contentStart, length: endCursor - contentStart)
+          return NSRange(location : contentStart,
+                         length   : endCursor - contentStart)
         }
         
         if isUnescaped {

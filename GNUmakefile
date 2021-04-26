@@ -43,8 +43,8 @@ endif
 
 # docker config
 DOCKER_BUILD_DIR=".docker.build"
-SWIFT_BUILD_IMAGE="swift:5.1.3"
-#SWIFT_BUILD_IMAGE="swift:5.0.3"
+#SWIFT_BUILD_IMAGE="swift:5.1.3"
+SWIFT_BUILD_IMAGE="swift:5.0.3"
 #SWIFT_BUILD_IMAGE="helje5/arm64v8-swift-dev:latest"
 #SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/aarch64-unknown-linux/$(CONFIGURATION)"
 SWIFT_DOCKER_BUILD_DIR="$(DOCKER_BUILD_DIR)/x86_64-unknown-linux/$(CONFIGURATION)"

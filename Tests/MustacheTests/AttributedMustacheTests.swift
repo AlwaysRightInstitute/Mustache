@@ -12,6 +12,12 @@ import XCTest
 @testable import Mustache
 @testable import AttributedMustache
 
+#if swift(>=5.1)
+#else
+extension NSAttributedString {
+  typealias Key = NSAttributedStringKey
+}
+#endif
 extension NSAttributedString.Key {
   static let testAttribute = NSAttributedString.Key("de.zeezide.test.attr")
 }
@@ -234,14 +240,14 @@ class AttributedMustacheTests: XCTestCase {
     }
     XCTAssertEqual(nodes.count, 1)
     
-    guard case .section(let name, let snodes) = nodes.first else {
+    guard !nodes.isEmpty, case .section(let name, let snodes) = nodes[0] else {
       XCTAssert(false, "expected section")
       return
     }
     XCTAssertEqual(snodes.count, 2)
     XCTAssertEqual(name, "wrapped")
 
-    guard case .tag(let tagName) = snodes.first else {
+    guard !snodes.isEmpty, case .tag(let tagName) = snodes[0] else {
       XCTAssert(false, "expected tag")
       return
     }
