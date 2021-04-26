@@ -78,7 +78,7 @@ class AttributedMustacheTests: XCTestCase {
   ]
   
   let fixChrisResult =
-    "Hello Ch&lt;r&gt;is\n" +
+    "Hello Chris\n" +
     "You have just won 10000 dollars!\n" +
     "\n" +
     "Well, 6000 dollars, after taxes." +
@@ -139,16 +139,16 @@ class AttributedMustacheTests: XCTestCase {
     let tree   = parser.parse(attributedString: fixTaxTemplate)
     let result = tree.render(object: fixDictChris)
     
-    XCTAssertFalse(result.isEmpty)
-    XCTAssertEqual(result, fixChrisResult)
+    XCTAssertFalse(result.length == 0)
+    XCTAssertEqual(result.string, fixChrisResult)
   }
   
-  func testTreeRendering() throws {
+  func testTreeParsing() throws {
     var parser = AttributedMustacheParser()
     let tree   = parser.parse(attributedString: fixTaxTemplate2)
     let result = tree.asMustacheString
     
-    XCTAssertEqual(result, fixTaxTemplate2)
+    XCTAssertEqual(result, fixTaxTemplate2.string)
   }
   
   func testClassKVCRendering() throws  {
@@ -156,7 +156,7 @@ class AttributedMustacheTests: XCTestCase {
     let tree   = parser.parse(attributedString: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
     
-    XCTAssertEqual(result, fixFullNameKVCResults1)
+    XCTAssertEqual(result.string, fixFullNameKVCResults1)
   }
   
   func testStructKVCRendering() throws {
@@ -164,7 +164,7 @@ class AttributedMustacheTests: XCTestCase {
     let tree   = parser.parse(attributedString: fixFullNameKVCTemplate1)
     let result = tree.render(object: ["persons": fixUsersClass])
     
-    XCTAssertEqual(result, fixFullNameKVCResults1)
+    XCTAssertEqual(result.string, fixFullNameKVCResults1)
   }
   
   func testLambda() throws {
@@ -172,8 +172,8 @@ class AttributedMustacheTests: XCTestCase {
     let tree   = parser.parse(attributedString: fixLambdaTemplate1)
     let result = tree.render(object: fixLambda1)
     
-    XCTAssertFalse(result.isEmpty)
-    XCTAssertEqual(result, fixLambda1Result)
+    XCTAssert(result.length > 0)
+    XCTAssertEqual(result.string, fixLambda1Result)
   }
   
   func testSimpleLambda() throws {
@@ -181,8 +181,8 @@ class AttributedMustacheTests: XCTestCase {
     let tree   = parser.parse(attributedString: fixLambdaTemplate1)
     let result = tree.render(object: fixSimpleLambda1)
     
-    XCTAssertFalse(result.isEmpty)
-    XCTAssertEqual(result, fixSimpleLambda1Result)
+    XCTAssert(result.length > 0)
+    XCTAssertEqual(result.string, fixSimpleLambda1Result)
   }
   
   func testPartialParsing() throws {
@@ -223,7 +223,7 @@ class AttributedMustacheTests: XCTestCase {
     
     //print("result: \(result)")
     XCTAssertNotNil(result)
-    XCTAssertEqual(result, fixPartialResult1)
+    XCTAssertEqual(result.string, fixPartialResult1)
   }
   
   #if false // TODO: Add support for attributed strings
@@ -254,7 +254,7 @@ class AttributedMustacheTests: XCTestCase {
     ( "testSimpleMustacheDict", testSimpleMustacheDict ),
     ( "testDictKVC"           , testDictKVC            ),
     ( "testDictNumberKVC"     , testDictNumberKVC      ),
-    ( "testTreeRendering"     , testTreeRendering      ),
+    ( "testTreeParsing"       , testTreeParsing        ),
     ( "testClassKVCRendering" , testClassKVCRendering  ),
     ( "testStructKVCRendering", testStructKVCRendering ),
     ( "testLambda"            , testLambda             ),
