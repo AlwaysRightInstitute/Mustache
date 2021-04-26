@@ -51,8 +51,13 @@ public struct Mustache {
   
   @inlinable
   public init(_ template: String) {
+    self.template = Mustache.parse(template)
+  }
+
+  @inlinable
+  public static func parse(_ template: String) -> MustacheNode {
     var parser = MustacheParser()
-    self.template = parser.parse(string: template)
+    return parser.parse(string: template)
   }
 
   @inlinable

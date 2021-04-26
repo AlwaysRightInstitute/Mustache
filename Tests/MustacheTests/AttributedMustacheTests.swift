@@ -10,6 +10,11 @@
 
 import XCTest
 @testable import Mustache
+@testable import AttributedMustache
+
+extension NSAttributedString.Key {
+  static let testAttribute = NSAttributedString.Key("de.zeezide.test.attr")
+}
 
 class AttributedMustacheTests: XCTestCase {
   
@@ -24,7 +29,7 @@ class AttributedMustacheTests: XCTestCase {
       {{^addresses}}Has NO addresses{{/addresses}}
       """
     )
-    let attrs : [ NSAttributedString.Key : Any ] = [ .foregroundColor: "red" ]
+    let attrs : [ NSAttributedString.Key : Any ] = [ .testAttribute: "red" ]
     ms.setAttributes(attrs, range: NSMakeRange(6, 8))
     return ms
   }()
@@ -40,7 +45,7 @@ class AttributedMustacheTests: XCTestCase {
       {{^addresses}}Has NO addresses{{/addresses}}
       """
     )
-    ms.setAttributes([.foregroundColor: "red"], range: NSMakeRange(6, 0))
+    ms.setAttributes([ .testAttribute: "red" ], range: NSMakeRange(6, 0))
     return ms
   }()
   
@@ -147,7 +152,7 @@ class AttributedMustacheTests: XCTestCase {
       XCTAssertEqual(node, .text(NSAttributedString(string: "Hello ")))
     }
     if nodes.count > 1 { let node = nodes[1]
-      let attrs : [ NSAttributedString.Key : Any ] = [ .foregroundColor: "red" ]
+      let attrs : [ NSAttributedString.Key : Any ] = [ .testAttribute: "red" ]
       XCTAssertEqual(node, .tag(NSAttributedString(string: "name",
                                                    attributes: attrs)))
     }
@@ -300,30 +305,7 @@ class AttributedMustacheTests: XCTestCase {
     XCTAssertNotNil(result)
     XCTAssertEqual(result.string, fixPartialResult1)
   }
-  
-  #if false // TODO: Add support for attributed strings
-  // MARK: - Swift 5 Features
-  func testDynamicallyCallableMustache() {
-    #if swift(>=5)
-    let fixTax = Mustache(fixTaxTemplate)
-    let result = fixTax(name: "Ch<r>is",
-      value       : 10000,
-      taxed_value : Int(10000 - (10000 * 0.4)),
-      in_ca       : true,
-      addresses   : [ [ "city"    : "Cupertino" ] ]
-    )
-    print("R:", result)
     
-    XCTAssertFalse(result.isEmpty)
-    XCTAssertEqual(result, fixChrisResult)
-    #endif
-  }
-  #else
-  func testDynamicallyCallableMustache() {
-    XCTAssert(false, "not implemented")
-  }
-  #endif
-  
   
   static var allTests = [
     ( "testSimpleMustacheDict", testSimpleMustacheDict ),

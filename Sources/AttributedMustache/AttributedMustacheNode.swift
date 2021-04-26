@@ -107,7 +107,7 @@ public extension AttributedMustacheNode {
   }
   @inlinable
   var asMustacheAttributedString : NSAttributedString {
-    let s = NSMutableAttributedString()
+    let s = NSMutableAttributedString(string: "")
     self.append(toAttributedString: s)
     return NSAttributedString(attributedString: s)
   }
@@ -194,7 +194,7 @@ public extension Sequence where Iterator.Element == AttributedMustacheNode {
   }
   @inlinable
   var asMustacheAttributedString : NSAttributedString {
-    let s = NSMutableAttributedString()
+    let s = NSMutableAttributedString(string: "")
     forEach { $0.append(toAttributedString: s) }
     return NSAttributedString(attributedString: s)
   }

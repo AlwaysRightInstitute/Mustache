@@ -7,8 +7,9 @@
 //
 
 #if canImport(Foundation)
-import class Foundation.NSAttributedString
-import class Foundation.NSMutableAttributedString
+import class  Foundation.NSAttributedString
+import class  Foundation.NSMutableAttributedString
+import struct Mustache.Mustache
 
 #if canImport(AppKit)
   import class AppKit.NSTextAttachment
@@ -62,7 +63,7 @@ public extension AttributedMustacheNode {
       
       case .invertedSection(let tag, let nodes):
         let v = ctx.value(forTag: tag)
-        guard !isMustacheTrue(value: v) else { return }
+        guard !Mustache.isMustacheTrue(value: v) else { return }
         render(nodes: nodes, inContext: ctx)
       
       case .tag(let tag), .unescapedTag(let tag): // we don't do escaping here?
@@ -78,10 +79,14 @@ public extension AttributedMustacheNode {
                 return NSAttributedString(attachment: attachment)
               case let image as UXImage:
                 let attachment = NSTextAttachment()
-                attachment.image = image
                 #if canImport(AppKit)
+                  if #available(macOS 10.11, *) {
+                    attachment.image = image
+                  }
                   let cell = NSTextAttachmentCell(imageCell: image)
                   attachment.attachmentCell = cell
+                #else
+                  attachment.image = image
                 #endif
                 return NSAttributedString(attachment: attachment)
             #endif
@@ -187,7 +192,7 @@ public extension AttributedMustacheNode {
 
     // Is it a plain false?
     
-    guard isMustacheTrue(value: vv) else { return }
+    guard Mustache.isMustacheTrue(value: vv) else { return }
     
     // Reflect on section value
     
@@ -208,7 +213,7 @@ public extension AttributedMustacheNode {
         }
 
       case .class, .dictionary: // adjust cursor
-        if isFoundationBaseType(value: vv) {
+        if Mustache.isFoundationBaseType(value: vv) {
           render(nodes: nodes, inContext: ctx)
         }
         else {

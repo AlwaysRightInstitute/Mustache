@@ -138,7 +138,7 @@ public struct AttributedMustacheParser {
   mutating private func parseTag() -> MustacheToken {
     guard !hitEOF, la0 == cStart && la1 == cStart,
           let attributedString = attributedString else {
-      return .text(.init())
+      return .text(NSAttributedString(string: ""))
     }
     
     let isUnescaped = la2 == cStart
@@ -220,7 +220,7 @@ public struct AttributedMustacheParser {
   
   mutating private func parseText() -> NSAttributedString {
     guard !hitEOF, let attributedString = attributedString else {
-      return NSAttributedString()
+      return NSAttributedString(string: "")
     }
     
     let startCursor = cursor

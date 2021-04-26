@@ -45,7 +45,7 @@ public extension MustacheNode {
       
       case .invertedSection(let tag, let nodes):
         let v = ctx.value(forTag: tag)
-        guard !isMustacheTrue(value: v) else { return }
+        guard !Mustache.isMustacheTrue(value: v) else { return }
         render(nodes: nodes, inContext: ctx)
       
       case .tag(let tag):
@@ -122,7 +122,7 @@ public extension MustacheNode {
   
     // Is it a plain false?
     
-    guard isMustacheTrue(value: vv) else { return }
+    guard Mustache.isMustacheTrue(value: vv) else { return }
     
     // Reflect on section value
     
@@ -143,7 +143,7 @@ public extension MustacheNode {
         }
 
       case .class, .dictionary: // adjust cursor
-        if isFoundationBaseType(value: vv) {
+        if Mustache.isFoundationBaseType(value: vv) {
           render(nodes: nodes, inContext: ctx)
         }
         else {

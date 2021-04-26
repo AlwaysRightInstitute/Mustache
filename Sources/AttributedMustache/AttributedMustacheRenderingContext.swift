@@ -7,6 +7,8 @@
 //
 
 #if canImport(Foundation)
+import Mustache
+
 import class Foundation.NSAttributedString
 import class Foundation.NSMutableAttributedString
 
@@ -58,7 +60,7 @@ open class AttributedMustacheDefaultRenderingContext
            : AttributedMustacheRenderingContext
 {
   
-  public let attributedString = NSMutableAttributedString()
+  public let attributedString = NSMutableAttributedString(string: "")
   public var stack            = [ Any? ]() // #linux-public
   
   public init(_ root: Any?) {
