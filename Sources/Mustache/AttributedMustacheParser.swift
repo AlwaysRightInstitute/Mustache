@@ -7,7 +7,8 @@
 //
 
 #if canImport(Foundation)
-import class Foundation.NSAttributedString
+import class  Foundation.NSAttributedString
+import struct Foundation.NSRange
 
 public struct AttributedMustacheParser {
   
@@ -23,8 +24,6 @@ public struct AttributedMustacheParser {
     case partial             (String)
   }
   
-  private var start   : UnsafePointer<UTF16.CodeUnit>? = nil
-  private var p       : UnsafePointer<UTF16.CodeUnit>? = nil
   private var cStart  : UTF16.CodeUnit = 123 // {
   private var cEnd    : UTF16.CodeUnit = 125 // }
   private let sStart  : UTF16.CodeUnit =  35 // #
@@ -46,31 +45,34 @@ public struct AttributedMustacheParser {
     get { return Character(UnicodeScalar(UInt32(cEnd))!) }
   }
   
-  
   // MARK: - Client Funcs
   
   private var attributedString : NSAttributedString?
   
+  /// Contains the characters in the attributed string using NSString
+  /// indexing. It's a hackaround for the different indexing in NSString
+  /// and Swift Strings. The characters are only exposed as a Swift String
+  /// by NSAttributedString ...
+  private var characters       = [ UTF16.CodeUnit ]()
+  
+  private var cursor           : Int = 0
+
   public mutating func parse(attributedString s: NSAttributedString)
                        -> AttributedMustacheNode
   {
     guard !s.string.isEmpty else { return .empty }
-    
-    self.attributedString = s
-    defer { self.attributedString = nil }
-    
-    let res : AttributedMustacheNode?
-            = s.string.utf16.withContiguousStorageIfAvailable
-    {
-      codeUnits in
-      
-      start = codeUnits.baseAddress
-      p     = start
-      
-      guard let nodes = parseNodes() else { return .empty }
-      return .global(nodes)
+
+    attributedString = s
+    characters       = Array(s.string.utf16) // yeah, a little lame
+    cursor           = 0
+    defer {
+      attributedString = nil
+      cursor = 0
+      characters.removeAll()
     }
-    assert(res != nil)
+    
+    guard let nodes = parseNodes() else { return .empty }
+    return .global(nodes)
   }
   
   
@@ -79,7 +81,7 @@ public struct AttributedMustacheParser {
   private mutating func parseNodes(section s: String? = nil)
                         -> [ AttributedMustacheNode ]?
   {
-    if p != nil && p!.pointee == 0 { return nil }
+    guard !hitEOF else { return nil }
     
     var nodes = [ AttributedMustacheNode ]()
     
@@ -126,98 +128,127 @@ public struct AttributedMustacheParser {
   // MARK: - Lexing
   
   mutating private func parseTagOrText() -> MustacheToken? {
-    guard p != nil && p!.pointee != 0 else { return nil }
+    guard !hitEOF else { return nil }
     
-    if p!.pointee == cStart && la1 == cStart {
-      return parseTag()
-    }
-    else {
-      return .text(parseText())
-    }
+    return (la0 == cStart && la1 == cStart)
+         ? parseTag()
+         : .text(parseText())
   }
   
   mutating private func parseTag() -> MustacheToken {
-    guard p != nil else { return .text("") }
-    guard p!.pointee == cStart && la1 == cStart else { return .text("") }
+    guard !hitEOF, la0 == cStart && la1 == cStart,
+          let attributedString = attributedString else {
+      return .text(.init())
+    }
     
     let isUnescaped = la2 == cStart
     
-    let start  = p!
-    p = p! + (isUnescaped ? 3 : 2) // skip {{
-    let marker = p!
+    let startCursor = cursor
+    cursor += (isUnescaped ? 3 : 2) // skip {{
+    var contentStart = cursor
     
-    while p!.pointee != 0 {
-      if p!.pointee == cEnd && la1 == cEnd && (!isUnescaped || la2 == cEnd) {
+    while !hitEOF {
+      if la0 == cEnd && la1 == cEnd && (!isUnescaped || la2 == cEnd) {
         // found end
-        let len = p! - marker
+        var contentRange : NSRange { // Intentionally dynamic
+          NSRange(location: contentStart, length: cursor - contentStart)
+        }
         
         if isUnescaped {
-          p = p! + 3 // skip }}}
-          let s = String.fromCString(marker, length: len)!
+          cursor += 3 // skip "}}}"
+          let s = attributedString.attributedSubstring(from: contentRange)
           return .unescapedTag(s)
         }
         
-        p = p! + 2 // skip }}
+        cursor += 2 // skip "}}"
         
-        let typec = marker.pointee
+        let typec = la0
         switch typec {
           case sStart: // #
-            let s = String.fromCString(marker + 1, length: len - 1)!
-            return .sectionStart(s)
+            contentStart += 1
+            let s = attributedString.attributedSubstring(from: contentRange)
+            return .sectionStart(s.string)
   
           case isStart: // ^
-            let s = String.fromCString(marker + 1, length: len - 1)!
-            return .invertedSectionStart(s)
+            contentStart += 1
+            let s = attributedString.attributedSubstring(from: contentRange)
+            return .invertedSectionStart(s.string)
   
           case sEnd: // /
-            let s = String.fromCString(marker + 1, length: len - 1)!
-            return .sectionEnd(s)
+            contentStart += 1
+            let s = attributedString.attributedSubstring(from: contentRange)
+            return .sectionEnd(s.string)
             
           case pStart: // >
-            var n = marker + 1 // skip >
-            while n.pointee == 32 { n += 1 } // skip spaces
-            let len = p! - n - 2
-            let s = String.fromCString(n, length: len)!
-            return .partial(s)
+            contentStart += 1 // skip >
+            while contentStart < cursor && characters[contentStart] == 32 {
+              contentStart += 1 // skip spaces
+            }
+
+            let s = attributedString.attributedSubstring(from: contentRange)
+            return .partial(s.string)
 
           case ueStart /* & */:
-            if (marker + 1).pointee == 32 {
-              let s = String.fromCString(marker + 2, length: len - 2)!
+            let la1: UTF16.CodeUnit = {
+              guard characters.count > (contentStart + 1) else { return 0 }
+              return characters[contentStart + 1]
+            }()
+            
+            if la1 == 32 {
+              let contentRange = NSRange(location : contentStart + 2,
+                                         length   : cursor - contentStart - 2)
+              let s = attributedString.attributedSubstring(from: contentRange)
               return .unescapedTag(s)
             }
             fallthrough
           
-          default:
-            let s = String.fromCString(marker, length: len)!
+          default: // this is the plain {{tag}}
+            let s = attributedString.attributedSubstring(from: contentRange)
             return .tag(s)
         }
       }
       
-      p = p! + 1
+      cursor += 1
     }
     
-    return .text(String(cString: start))
+    // hit EOF w/o the tag being closed
+    let range = NSRange(location : startCursor,
+                        length   : attributedString.length - startCursor)
+    return .text(attributedString.attributedSubstring(from: range))
   }
   
-  mutating private func parseText() -> String {
-    assert(p != nil)
-    let start = p!
-    
-    while p!.pointee != 0 {
-      if p!.pointee == cStart && la1 == cStart {
-        fatalError("NOT IMPLEMENTED")
-        //return String.fromCString(start, length: p! - start)!
-      }
-      
-      p = p! + 1
+  mutating private func parseText() -> NSAttributedString {
+    guard !hitEOF, let attributedString = attributedString else {
+      return NSAttributedString()
     }
     
-    return String(cString: start)
+    let startCursor = cursor
+    while !hitEOF && (la0 != cStart && la1 != cStart) { // until "{{"
+      cursor += 1
+    }
+    
+    let range = NSRange(location: startCursor, length: cursor - startCursor)
+    assert(range.location   >= 0 && range.location   <  attributedString.length)
+    assert(range.upperBound >= 0 && range.upperBound <= attributedString.length)
+    return attributedString.attributedSubstring(from: range)
   }
   
-  private var la0 : UTF16.CodeUnit { return p != nil ? p!.pointee : 0 }
-  private var la1 : UTF16.CodeUnit { return la0 != 0 ? (p! + 1).pointee : 0 }
-  private var la2 : UTF16.CodeUnit { return la1 != 0 ? (p! + 2).pointee : 0 }
+  
+  // MARK: - Buffer Access
+  
+  private var hitEOF : Bool {
+    guard let s = attributedString else { return true }
+    return cursor < s.length
+  }
+  
+  private func la(_ p: Int) -> UTF16.CodeUnit? {
+    guard cursor + p < characters.count else { return nil }
+    assert(cursor + p >= 0)
+    return characters[p]
+  }
+  private var la0 : UTF16.CodeUnit { return la(0) ?? 0 }
+  private var la1 : UTF16.CodeUnit { return la(1) ?? 0 }
+  private var la2 : UTF16.CodeUnit { return la(2) ?? 0 }
 }
 
 #endif // canImport(Foundation)
