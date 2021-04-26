@@ -10,14 +10,14 @@ public struct MustacheParser {
   
   public init() {}
   
-  enum MustacheToken {
-    case Text(String)
-    case Tag(String)
-    case UnescapedTag(String)
-    case SectionStart(String)
-    case InvertedSectionStart(String)
-    case SectionEnd(String)
-    case Partial(String)
+  private enum MustacheToken {
+    case text                (String)
+    case tag                 (String)
+    case unescapedTag        (String)
+    case sectionStart        (String)
+    case invertedSectionStart(String)
+    case sectionEnd          (String)
+    case partial             (String)
   }
   
   private var start   : UnsafePointer<CChar>? = nil
@@ -92,20 +92,20 @@ public struct MustacheParser {
     guard let token = parseTagOrText() else { return nil }
     
     switch token {
-      case .Text        (let s): return .text(s)
-      case .Tag         (let s): return .tag(s)
-      case .UnescapedTag(let s): return .unescapedTag(s)
-      case .Partial     (let s): return .partial(s)
+      case .text        (let s): return .text(s)
+      case .tag         (let s): return .tag(s)
+      case .unescapedTag(let s): return .unescapedTag(s)
+      case .partial     (let s): return .partial(s)
       
-      case .SectionStart(let s):
+      case .sectionStart(let s):
         guard let children = parseNodes(section: s) else { return .empty }
         return .section(s, children)
       
-      case .InvertedSectionStart(let s):
+      case .invertedSectionStart(let s):
         guard let children = parseNodes(section: s) else { return .empty }
         return .invertedSection(s, children)
       
-      case .SectionEnd(let s):
+      case .sectionEnd(let s):
         if !s.isEmpty && s != se {
           print("section tags not balanced: \(s) expected \(se as Optional)")
         }
@@ -123,13 +123,13 @@ public struct MustacheParser {
       return parseTag()
     }
     else {
-      return .Text(parseText())
+      return .text(parseText())
     }
   }
   
   mutating private func parseTag() -> MustacheToken {
-    guard p != nil else { return .Text("") }
-    guard p!.pointee == cStart && la1 == cStart else { return .Text("") }
+    guard p != nil else { return .text("") }
+    guard p!.pointee == cStart && la1 == cStart else { return .text("") }
     
     let isUnescaped = la2 == cStart
     
@@ -145,7 +145,7 @@ public struct MustacheParser {
         if isUnescaped {
           p = p! + 3 // skip }}}
           let s = String.fromCString(marker, length: len)!
-          return .UnescapedTag(s)
+          return .unescapedTag(s)
         }
         
         p = p! + 2 // skip }}
@@ -154,40 +154,40 @@ public struct MustacheParser {
         switch typec {
           case sStart: // #
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .SectionStart(s)
+            return .sectionStart(s)
   
           case isStart: // ^
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .InvertedSectionStart(s)
+            return .invertedSectionStart(s)
   
           case sEnd: // /
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .SectionEnd(s)
+            return .sectionEnd(s)
             
           case pStart: // >
             var n = marker + 1 // skip >
             while n.pointee == 32 { n += 1 } // skip spaces
             let len = p! - n - 2
             let s = String.fromCString(n, length: len)!
-            return .Partial(s)
+            return .partial(s)
 
           case ueStart /* & */:
             if (marker + 1).pointee == 32 {
               let s = String.fromCString(marker + 2, length: len - 2)!
-              return .UnescapedTag(s)
+              return .unescapedTag(s)
             }
             fallthrough
           
           default:
             let s = String.fromCString(marker, length: len)!
-            return .Tag(s)
+            return .tag(s)
         }
       }
       
       p = p! + 1
     }
     
-    return .Text(String(cString: start))
+    return .text(String(cString: start))
   }
   
   mutating private func parseText() -> String {

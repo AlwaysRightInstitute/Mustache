@@ -1,9 +1,9 @@
 //
 //  SimpleKVS.swift
-//  TestMustache
+//  Mustache
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
 //
 
 import class Foundation.NSObject
@@ -14,26 +14,22 @@ let lx30hack = true
 public protocol KeyValueCodingType {
   
   func value(forKey k: String) -> Any?
-  
 }
 
 public extension KeyValueCodingType {
   
+  @inlinable
   func value(forKey k: String) -> Any? {
     return KeyValueCoding.defaultValue(forKey: k, inObject: self)
   }
-  
 }
 
 
 public struct KeyValueCoding {
-  
+
+  @inlinable
   public static func value(forKeyPath p: String, inObject o: Any?) -> Any? {
-    #if swift(>=3.2)
-      let path = p.split(separator: ".").map(String.init)
-    #else
-      let path = p.characters.split(separator: ".").map { String($0) }
-    #endif
+    let path = p.split(separator: ".").map(String.init)
     var cursor = o
     for key in path {
       cursor = value(forKey: key, inObject: cursor)
@@ -42,6 +38,7 @@ public struct KeyValueCoding {
     return cursor
   }
 
+  @inlinable
   public static func value(forKey k: String, inObject o: Any?) -> Any? {
     if let kvc = o as? KeyValueCodingType {
       return kvc.value(forKey: k)
@@ -49,6 +46,7 @@ public struct KeyValueCoding {
     return defaultValue(forKey: k, inObject: o)
   }
   
+  @inlinable
   public static func defaultValue(forKey k: String, inObject o: Any?) -> Any? {
     // Presumably this is really inefficient, but well :-)
     guard let object = o else { return nil }
@@ -90,6 +88,7 @@ public struct KeyValueCoding {
 
 public extension KeyValueCoding {
   
+  @inlinable
   static func defaultValue(forKey k: String, inDictionary o: Any,
                            mirror: Mirror) -> Any?
   {
@@ -122,5 +121,4 @@ public extension KeyValueCoding {
     }
     return nil
   }
-  
 }

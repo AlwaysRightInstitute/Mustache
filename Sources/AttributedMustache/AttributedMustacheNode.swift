@@ -1,25 +1,29 @@
 //
-//  MustacheNode.swift
-//  Noze.io
+//  AttributedMustacheNode.swift
+//  mustache
 //
-//  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
+//  Created by Helge Heß on 25.04.21.
+//  Copyright © 2021 ZeeZide GmbH. All rights reserved.
 //
+
+#if canImport(Foundation)
+import class Foundation.NSAttributedString
+import class Foundation.NSMutableAttributedString
 
 /// One node of the Mustache template. A template is parsed into a tree of the
 /// various nodes.
-public enum MustacheNode: Equatable {
+public enum AttributedMustacheNode: Equatable {
   
   case empty
   
   /// Represents the top-level node of a Mustache template, contains the list
   /// of nodes.
-  case global([ MustacheNode])
+  case global([ AttributedMustacheNode])
   
   /// Regular CDATA in the template
-  case text(String)
+  case text(NSAttributedString)
   
-  /// A section, can be either a repetition (if the value evaluates to a 
+  /// A section, can be either a repetition (if the value evaluates to a
   /// Sequence) or a conditional (if the value resolves to true/false).
   /// If the value is false or an empty list, the contained nodes won't be
   /// rendered.
@@ -37,7 +41,7 @@ public enum MustacheNode: Equatable {
   ///       Has address in: {{city}}
   ///     {{/addresses}}
   ///
-  case section(String, [ MustacheNode ])
+  case section(String, [ AttributedMustacheNode ])
   
   /// An inverted section either displays its contents or not, it never repeats.
   ///
@@ -53,7 +57,7 @@ public enum MustacheNode: Equatable {
   ///       The person has no addresses assigned.
   ///     {{/addresses}}
   ///
-  case invertedSection(String, [ MustacheNode ])
+  case invertedSection(String, [ AttributedMustacheNode ])
   
   /// A Mustache Variable. Will try to lookup the given string as a name in the
   /// current context. If the current context doesn't have the name, the lookup
@@ -65,7 +69,7 @@ public enum MustacheNode: Equatable {
   ///
   ///     {{city}}
   ///
-  case tag(String)
+  case tag(NSAttributedString)
   
   /// This is the same like Tag, but the value won't be HTML escaped.
   ///
@@ -77,7 +81,7 @@ public enum MustacheNode: Equatable {
   ///
   ///     {{^ htmlToEmbed}}
   ///
-  case unescapedTag(String)
+  case unescapedTag(NSAttributedString)
   
   /// A partial. How this is looked up depends on the rendering context
   /// implementation.
@@ -91,11 +95,9 @@ public enum MustacheNode: Equatable {
   case partial(String)
 }
 
-
-
 // MARK: - Convert parsed nodes back to a String template
 
-public extension MustacheNode {
+public extension AttributedMustacheNode {
   
   @inlinable
   var asMustacheString : String {
@@ -103,9 +105,15 @@ public extension MustacheNode {
     self.append(toString: &s)
     return s
   }
+  @inlinable
+  var asMustacheAttributedString : NSAttributedString {
+    let s = NSMutableAttributedString(string: "")
+    self.append(toAttributedString: s)
+    return NSAttributedString(attributedString: s)
+  }
 }
 
-public extension MustacheNode {
+public extension AttributedMustacheNode {
   
   @inlinable
   func append(toString s : inout String) {
@@ -113,34 +121,70 @@ public extension MustacheNode {
       case .empty: return
       
       case .text(let text):
-        s += text
+        s += text.string
       
       case .global(let nodes):
         nodes.forEach { $0.append(toString: &s) }
       
       case .section(let key, let nodes):
-        s += "{{#\(key)}}"
+        s += "{{#" + key + "}}"
         nodes.forEach { $0.append(toString: &s) }
-        s += "{{/\(key)}}"
+        s += "{{/" + key + "}}"
       
       case .invertedSection(let key, let nodes):
-        s += "{{^\(key)}}"
+        s += "{{^" + key + "}}"
         nodes.forEach { $0.append(toString: &s) }
-        s += "{{/\(key)}}"
+        s += "{{/" + key + "}}"
+
+      case .tag(let attributedKey):
+        s += "{{" + attributedKey.string + "}}"
       
-      case .tag(let key):
-        s += "{{\(key)}}"
-      
-      case .unescapedTag(let key):
-        s += "{{{\(key)}}}"
+      case .unescapedTag(let attributedKey):
+        s += "{{{" + attributedKey.string + "}}}"
       
       case .partial(let key):
-        s += "{{> \(key)}}"
+        s += "{{> " + key + "}}"
+    }
+  }
+
+  @inlinable
+  func append(toAttributedString s: NSMutableAttributedString) {
+    switch self {
+      case .empty: return
+      
+      case .text(let text):
+        s.append(text)
+      
+      case .global(let nodes):
+        nodes.forEach { $0.append(toAttributedString: s) }
+      
+      case .section(let key, let nodes):
+        s.append(NSAttributedString(string: "{{#\(key)}}"))
+        nodes.forEach { $0.append(toAttributedString: s) }
+        s.append(NSAttributedString(string: "{{/\(key)}}"))
+      
+      case .invertedSection(let key, let nodes):
+        s.append(NSAttributedString(string: "{{^\(key)}}"))
+        nodes.forEach { $0.append(toAttributedString: s) }
+        s.append(NSAttributedString(string: "{{/\(key)}}"))
+      
+      case .tag(let key):
+        s.append(NSAttributedString(string: "{{"))
+        s.append(key)
+        s.append(NSAttributedString(string: "}}"))
+
+      case .unescapedTag(let key):
+        s.append(NSAttributedString(string: "{{{"))
+        s.append(key)
+        s.append(NSAttributedString(string: "}}}"))
+      
+      case .partial(let key):
+        s.append(NSAttributedString(string: "{{> \(key)}}"))
     }
   }
 }
 
-public extension Sequence where Iterator.Element == MustacheNode {
+public extension Sequence where Iterator.Element == AttributedMustacheNode {
 
   @inlinable
   var asMustacheString : String {
@@ -148,12 +192,18 @@ public extension Sequence where Iterator.Element == MustacheNode {
     forEach { $0.append(toString: &s) }
     return s
   }
+  @inlinable
+  var asMustacheAttributedString : NSAttributedString {
+    let s = NSMutableAttributedString(string: "")
+    forEach { $0.append(toAttributedString: s) }
+    return NSAttributedString(attributedString: s)
+  }
 }
 
 
 // MARK: - Template Reflection
 
-public extension MustacheNode {
+public extension AttributedMustacheNode {
   
   @inlinable
   var hasKeys: Bool {
@@ -175,7 +225,7 @@ public extension MustacheNode {
         set.insert(key)
         nodes.forEach { $0.addKeys(to: &set) }
       case .tag(let key), .unescapedTag(let key):
-        set.insert(key)
+        set.insert(key.string)
       case .partial:
         return
     }
@@ -189,7 +239,7 @@ public extension MustacheNode {
   }
 }
 
-public extension Sequence where Element == MustacheNode {
+public extension Sequence where Element == AttributedMustacheNode {
   
   @inlinable
   var keys : Set<String> {
@@ -198,7 +248,7 @@ public extension Sequence where Element == MustacheNode {
     return set
   }
 }
-public extension Collection where Element == MustacheNode {
+public extension Collection where Element == AttributedMustacheNode {
   
   @inlinable
   var keys : Set<String> {
@@ -207,3 +257,4 @@ public extension Collection where Element == MustacheNode {
     return set
   }
 }
+#endif // canImport(Foundation)

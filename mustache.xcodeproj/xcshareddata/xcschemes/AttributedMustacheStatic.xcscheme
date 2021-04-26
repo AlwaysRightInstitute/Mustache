@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E8C321552635A83F001E3EC8"
-               BuildableName = "libMustache.a"
-               BlueprintName = "MustacheStatic"
-               ReferencedContainer = "container:mustache.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E8AFFF3D1E6F11B50074266E"
-               BuildableName = "MustacheTests.xctest"
-               BlueprintName = "MustacheTests"
+               BlueprintIdentifier = "E865CEDC26370B1F008F71E2"
+               BuildableName = "libAttributedMustacheStatic.a"
+               BlueprintName = "AttributedMustacheStatic"
                ReferencedContainer = "container:mustache.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -64,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E8C321552635A83F001E3EC8"
-            BuildableName = "libMustache.a"
-            BlueprintName = "MustacheStatic"
+            BlueprintIdentifier = "E865CEDC26370B1F008F71E2"
+            BuildableName = "libAttributedMustacheStatic.a"
+            BlueprintName = "AttributedMustacheStatic"
             ReferencedContainer = "container:mustache.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
