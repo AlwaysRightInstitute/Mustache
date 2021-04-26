@@ -24,7 +24,8 @@ class AttributedMustacheTests: XCTestCase {
       {{^addresses}}Has NO addresses{{/addresses}}
       """
     )
-    ms.setAttributes([.foregroundColor: "red"], range: NSMakeRange(6, 0))
+    let attrs : [ NSAttributedString.Key : Any ] = [ .foregroundColor: "red" ]
+    ms.setAttributes(attrs, range: NSMakeRange(6, 8))
     return ms
   }()
   let fixTaxTemplate2 : NSAttributedString = {
@@ -134,9 +135,62 @@ class AttributedMustacheTests: XCTestCase {
     }
   }
   
+  func testTaxTemplateParsing() throws {
+    var parser = AttributedMustacheParser()
+    let tree   = parser.parse(attributedString: fixTaxTemplate)
+    XCTAssertNotEqual(tree, .empty)
+    
+    guard case .global(let nodes) = tree else {
+      XCTAssert(false, "expected global, got \(tree)")
+      return
+    }
+    
+    /*
+    Hello {{name}}
+    You have just won {{& value}} dollars!
+    {{#in_ca}}
+    Well, {{{taxed_value}}} dollars, after taxes.{{/in_ca}}
+    {{#addresses}}  Has address in: {{city}}{{/addresses}}
+    {{^addresses}}Has NO addresses{{/addresses}}
+ */
+    XCTAssertEqual(nodes.count, 10)
+    if nodes.count > 0 { let node = nodes[0]
+      XCTAssertEqual(node, .text(NSAttributedString(string: "Hello ")))
+    }
+    if nodes.count > 1 { let node = nodes[1]
+      let attrs : [ NSAttributedString.Key : Any ] = [ .foregroundColor: "red" ]
+      XCTAssertEqual(node, .tag(NSAttributedString(string: "name",
+                                                   attributes: attrs)))
+    }
+    if nodes.count > 2 { let node = nodes[2]
+      XCTAssertEqual(node,
+                     .text(NSAttributedString(string: "\nYou have just won ")))
+    }
+    if nodes.count > 3 { let node = nodes[3]
+      XCTAssertEqual(node, .unescapedTag(NSAttributedString(string: "value")))
+    }
+    if nodes.count > 9,
+       case .invertedSection(let name, let contents) = nodes[9]
+    {
+      XCTAssertEqual(name, "addresses")
+      XCTAssertEqual(contents.count, 1)
+      XCTAssertEqual(contents.first,
+                     .text(NSAttributedString(string: "Has NO addresses")))
+    }
+    else { XCTAssert(false, "expected inverted section") }
+
+    print("NODES:")
+    for node in nodes {
+      print("NODE:", node)
+    }
+    
+  }
+  
   func testSimpleMustacheDict() throws {
     var parser = AttributedMustacheParser()
     let tree   = parser.parse(attributedString: fixTaxTemplate)
+    XCTAssertNotEqual(tree, .empty)
+    
     let result = tree.render(object: fixDictChris)
     
     XCTAssertFalse(result.length == 0)
@@ -255,6 +309,7 @@ class AttributedMustacheTests: XCTestCase {
     ( "testDictKVC"           , testDictKVC            ),
     ( "testDictNumberKVC"     , testDictNumberKVC      ),
     ( "testTreeParsing"       , testTreeParsing        ),
+    ( "testTaxTemplateParsing", testTaxTemplateParsing ),
     ( "testClassKVCRendering" , testClassKVCRendering  ),
     ( "testStructKVCRendering", testStructKVCRendering ),
     ( "testLambda"            , testLambda             ),

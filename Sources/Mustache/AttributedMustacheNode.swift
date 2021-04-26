@@ -12,7 +12,7 @@ import class Foundation.NSMutableAttributedString
 
 /// One node of the Mustache template. A template is parsed into a tree of the
 /// various nodes.
-public enum AttributedMustacheNode {
+public enum AttributedMustacheNode: Equatable {
   
   case empty
   

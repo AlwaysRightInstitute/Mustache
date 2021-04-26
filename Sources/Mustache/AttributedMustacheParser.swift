@@ -146,12 +146,14 @@ public struct AttributedMustacheParser {
     let startCursor = cursor
     cursor += (isUnescaped ? 3 : 2) // skip {{
     var contentStart = cursor
-    
+    let typec = la0
+
     while !hitEOF {
       if la0 == cEnd && la1 == cEnd && (!isUnescaped || la2 == cEnd) {
         // found end
+        let endCursor = cursor
         var contentRange : NSRange { // Intentionally dynamic
-          NSRange(location: contentStart, length: cursor - contentStart)
+          NSRange(location: contentStart, length: endCursor - contentStart)
         }
         
         if isUnescaped {
@@ -162,7 +164,6 @@ public struct AttributedMustacheParser {
         
         cursor += 2 // skip "}}"
         
-        let typec = la0
         switch typec {
           case sStart: // #
             contentStart += 1
@@ -195,8 +196,8 @@ public struct AttributedMustacheParser {
             }()
             
             if la1 == 32 {
-              let contentRange = NSRange(location : contentStart + 2,
-                                         length   : cursor - contentStart - 2)
+              let contentRange = NSRange(location: contentStart + 2,
+                                         length: endCursor - contentStart - 2)
               let s = attributedString.attributedSubstring(from: contentRange)
               return .unescapedTag(s)
             }
@@ -223,7 +224,7 @@ public struct AttributedMustacheParser {
     }
     
     let startCursor = cursor
-    while !hitEOF && (la0 != cStart && la1 != cStart) { // until "{{"
+    while !hitEOF && !(la0 == cStart && la1 == cStart) { // until "{{"
       cursor += 1
     }
     
@@ -238,13 +239,13 @@ public struct AttributedMustacheParser {
   
   private var hitEOF : Bool {
     guard let s = attributedString else { return true }
-    return cursor < s.length
+    return cursor >= s.length
   }
   
   private func la(_ p: Int) -> UTF16.CodeUnit? {
     guard cursor + p < characters.count else { return nil }
     assert(cursor + p >= 0)
-    return characters[p]
+    return characters[cursor + p]
   }
   private var la0 : UTF16.CodeUnit { return la(0) ?? 0 }
   private var la1 : UTF16.CodeUnit { return la(1) ?? 0 }
