@@ -7,8 +7,11 @@
 //
 
 #if canImport(Foundation)
-import class  Foundation.NSAttributedString
-import struct Foundation.NSRange
+import class    Foundation.NSAttributedString
+import struct   Foundation.NSRange
+import protocol Mustache.KeyValueCodingType
+
+extension NSAttributedString: KeyValueCodingType {}
 
 public struct AttributedMustacheParser {
   
