@@ -67,7 +67,9 @@ public extension AttributedMustacheNode {
         render(nodes: nodes, inContext: ctx)
       
       case .tag(let tag), .unescapedTag(let tag): // we don't do escaping here?
-        guard let v = ctx.value(forTag: tag.string) else { return }
+        guard let v = ctx.value(forTag: tag.string) else {
+          return
+        }
         
         // Note: No HTML escaping here
         // TBD: support images and NSTextAttachment's directly?

@@ -257,16 +257,6 @@ class AttributedMustacheTests: XCTestCase {
     print("S:\n---\n\(s)\n---")
 
     let result = tree.render(object: fixSimpleLambda1)
-
-    /*
-     let fixLambdaTemplate1 = NSAttributedString(string:
-       "{{#wrapped}}{{name}} is awesome.{{/wrapped}}")
-    let fixSimpleLambda1 : [ String : Any ] = [
-      "name"    : "Willy",
-      "wrapped" : { ( text: String ) -> String in return "<b>" + text + "</b>" }
-    ]
-    let fixSimpleLambda1Result = "<b>{{name}} is awesome.</b>"
- */
     XCTAssert(result.length > 0)
     XCTAssertEqual(result.string, fixSimpleLambda1Result)
   }
@@ -278,6 +268,22 @@ class AttributedMustacheTests: XCTestCase {
     XCTAssertNotNil(tree)
     // print("tree: \(tree)")
     // print("tree: \(tree.asMustacheString)")
+  }
+  
+  func testNestedAttributedStrings() {
+    var parser = AttributedMustacheParser()
+    let tree   = parser.parse(attributedString: NSAttributedString(string:
+      "{{#paragraphs}}{{self}}{{/paragraphs}}"
+    ))
+    
+    let paragraphs : [ NSAttributedString ] = [
+      .init(string: "Hello"),
+      .init(string: " "),
+      .init(string: "World")
+    ]
+    let result = tree.render(object: ["paragraphs": paragraphs ])
+    XCTAssert(result.length > 0)
+    XCTAssertEqual(result.string, "Hello World")
   }
   
   

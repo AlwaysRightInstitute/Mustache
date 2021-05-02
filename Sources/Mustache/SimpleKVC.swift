@@ -81,6 +81,8 @@ public struct KeyValueCoding {
       
       return some
     }
+    
+    if k == "self" { return object }
     return nil
   }
   
