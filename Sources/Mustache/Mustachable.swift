@@ -3,7 +3,7 @@
 //  mustache
 //
 //  Created by Helge Heß on 2019-01-31.
-//  Copyright © 2019 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2019-2021 ZeeZide GmbH. All rights reserved.
 //
 
 #if swift(>=5)
@@ -46,17 +46,31 @@
  */
 @dynamicCallable
 public struct Mustache {
-  let template : MustacheNode
   
+  public let template : MustacheNode
+  
+  @inlinable
   public init(_ template: String) {
-    let parser = MustacheParser()
-    self.template = parser.parse(string: template)
+    self.template = Mustache.parse(template)
+  }
+
+  @inlinable
+  public static func parse(_ template: String) -> MustacheNode {
+    var parser = MustacheParser()
+    return parser.parse(string: template)
+  }
+
+  @inlinable
+  public func render(object: Any?) -> String {
+    return template.render(object: object)
   }
   
-  public func dynamicallyCall(
-                withKeywordArguments args: KeyValuePairs<String, Any>) 
-       -> String {
-    let dictArgs = Dictionary(uniqueKeysWithValues: 
+  @inlinable
+  public func dynamicallyCall(withKeywordArguments
+                                args: KeyValuePairs<String, Any>)
+              -> String
+  {
+    let dictArgs = Dictionary(uniqueKeysWithValues:
                                 args.map { ( $0.key, $0.value) })
     return template.render(object: dictArgs)
   }

@@ -3,32 +3,32 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
 //
 
-public class MustacheParser {
+public struct MustacheParser {
   
   public init() {}
   
-  enum MustacheToken {
-    case Text(String)
-    case Tag(String)
-    case UnescapedTag(String)
-    case SectionStart(String)
-    case InvertedSectionStart(String)
-    case SectionEnd(String)
-    case Partial(String)
+  private enum MustacheToken {
+    case text                (String)
+    case tag                 (String)
+    case unescapedTag        (String)
+    case sectionStart        (String)
+    case invertedSectionStart(String)
+    case sectionEnd          (String)
+    case partial             (String)
   }
   
-  var start   : UnsafePointer<CChar>? = nil
-  var p       : UnsafePointer<CChar>? = nil
-  var cStart  : CChar = 123 // {
-  var cEnd    : CChar = 125 // }
-  var sStart  : CChar =  35 // #
-  var isStart : CChar =  94 // ^
-  var sEnd    : CChar =  47 // /
-  var ueStart : CChar =  38 // &
-  var pStart  : CChar =  62 // >
+  private var start   : UnsafePointer<CChar>? = nil
+  private var p       : UnsafePointer<CChar>? = nil
+  private var cStart  : CChar = 123 // {
+  private var cEnd    : CChar = 125 // }
+  private let sStart  : CChar =  35 // #
+  private let isStart : CChar =  94 // ^
+  private let sEnd    : CChar =  47 // /
+  private let ueStart : CChar =  38 // &
+  private let pStart  : CChar =  62 // >
   
   public var openCharacter : Character {
     set {
@@ -48,35 +48,36 @@ public class MustacheParser {
   
   // MARK: - Client Funcs
   
-  public func parse(string s: String) -> MustacheNode {
+  @inlinable
+  public mutating func parse(string s: String) -> MustacheNode {
     return s.withCString { cs in
       parse(cstr: cs)
     }
   }
   
-  var root : MustacheNode! = nil
-  
-  public func parse(cstr cs: UnsafePointer<CChar>) -> MustacheNode {
-    if cs.pointee == 0 { return .Empty }
+  public mutating func parse(cstr cs: UnsafePointer<CChar>) -> MustacheNode {
+    if cs.pointee == 0 { return .empty }
     
     start = cs
     p     = start
     
-    guard let nodes = parseNodes() else { return .Empty }
-    return .Global(nodes)
+    guard let nodes = parseNodes() else { return .empty }
+    return .global(nodes)
   }
   
   
   // MARK: - Parsing
   
-  func parseNodes(section s: String? = nil) -> [ MustacheNode ]? {
+  private mutating func parseNodes(section s: String? = nil)
+                        -> [ MustacheNode ]?
+  {
     if p != nil && p!.pointee == 0 { return nil }
     
     var nodes = [ MustacheNode ]()
     
     while let node = parseNode(sectionEnd: s) {
       switch node {
-        case .Empty: continue
+        case .empty: continue
         default: break
       }
       
@@ -86,25 +87,25 @@ public class MustacheParser {
     return nodes
   }
   
-  func parseNode(sectionEnd se: String? = nil) -> MustacheNode? {
+  private mutating func parseNode(sectionEnd se: String? = nil) -> MustacheNode?
+  {
     guard let token = parseTagOrText() else { return nil }
-    //print("PARSED: \(token)")
     
     switch token {
-      case .Text        (let s): return .Text(s)
-      case .Tag         (let s): return .Tag(s)
-      case .UnescapedTag(let s): return .UnescapedTag(s)
-      case .Partial     (let s): return .Partial(s)
+      case .text        (let s): return .text(s)
+      case .tag         (let s): return .tag(s)
+      case .unescapedTag(let s): return .unescapedTag(s)
+      case .partial     (let s): return .partial(s)
       
-      case .SectionStart(let s):
-        guard let children = parseNodes(section: s) else { return .Empty }
-        return .Section(s, children)
+      case .sectionStart(let s):
+        guard let children = parseNodes(section: s) else { return .empty }
+        return .section(s, children)
       
-      case .InvertedSectionStart(let s):
-        guard let children = parseNodes(section: s) else { return .Empty }
-        return .InvertedSection(s, children)
+      case .invertedSectionStart(let s):
+        guard let children = parseNodes(section: s) else { return .empty }
+        return .invertedSection(s, children)
       
-      case .SectionEnd(let s):
+      case .sectionEnd(let s):
         if !s.isEmpty && s != se {
           print("section tags not balanced: \(s) expected \(se as Optional)")
         }
@@ -115,20 +116,20 @@ public class MustacheParser {
   
   // MARK: - Lexing
   
-  func parseTagOrText() -> MustacheToken? {
+  mutating private func parseTagOrText() -> MustacheToken? {
     guard p != nil && p!.pointee != 0 else { return nil }
     
     if p!.pointee == cStart && la1 == cStart {
       return parseTag()
     }
     else {
-      return .Text(parseText())
+      return .text(parseText())
     }
   }
   
-  func parseTag() -> MustacheToken {
-    guard p != nil else { return .Text("") }
-    guard p!.pointee == cStart && la1 == cStart else { return .Text("") }
+  mutating private func parseTag() -> MustacheToken {
+    guard p != nil else { return .text("") }
+    guard p!.pointee == cStart && la1 == cStart else { return .text("") }
     
     let isUnescaped = la2 == cStart
     
@@ -144,7 +145,7 @@ public class MustacheParser {
         if isUnescaped {
           p = p! + 3 // skip }}}
           let s = String.fromCString(marker, length: len)!
-          return .UnescapedTag(s)
+          return .unescapedTag(s)
         }
         
         p = p! + 2 // skip }}
@@ -153,43 +154,43 @@ public class MustacheParser {
         switch typec {
           case sStart: // #
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .SectionStart(s)
+            return .sectionStart(s)
   
           case isStart: // ^
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .InvertedSectionStart(s)
+            return .invertedSectionStart(s)
   
           case sEnd: // /
             let s = String.fromCString(marker + 1, length: len - 1)!
-            return .SectionEnd(s)
+            return .sectionEnd(s)
             
           case pStart: // >
             var n = marker + 1 // skip >
             while n.pointee == 32 { n += 1 } // skip spaces
             let len = p! - n - 2
             let s = String.fromCString(n, length: len)!
-            return .Partial(s)
+            return .partial(s)
 
           case ueStart /* & */:
             if (marker + 1).pointee == 32 {
               let s = String.fromCString(marker + 2, length: len - 2)!
-              return .UnescapedTag(s)
+              return .unescapedTag(s)
             }
             fallthrough
           
           default:
             let s = String.fromCString(marker, length: len)!
-            return .Tag(s)
+            return .tag(s)
         }
       }
       
       p = p! + 1
     }
     
-    return .Text(String(cString: start))
+    return .text(String(cString: start))
   }
   
-  func parseText() -> String {
+  mutating private func parseText() -> String {
     assert(p != nil)
     let start = p!
     
@@ -204,9 +205,9 @@ public class MustacheParser {
     return String(cString: start)
   }
   
-  var la0 : CChar { return p != nil ? p!.pointee : 0 }
-  var la1 : CChar { return la0 != 0 ? (p! + 1).pointee : 0 }
-  var la2 : CChar { return la1 != 0 ? (p! + 2).pointee : 0 }
+  private var la0 : CChar { return p != nil ? p!.pointee : 0 }
+  private var la1 : CChar { return la0 != 0 ? (p! + 1).pointee : 0 }
+  private var la2 : CChar { return la1 != 0 ? (p! + 2).pointee : 0 }
 }
 
 #if os(Linux)
@@ -215,7 +216,7 @@ public class MustacheParser {
   import func Darwin.memcpy
 #endif
 
-extension String {
+fileprivate extension String {
   
   static func fromCString(_ cs: UnsafePointer<CChar>, length olength: Int?)
               -> String?
