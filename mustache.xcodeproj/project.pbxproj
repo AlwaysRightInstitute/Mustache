@@ -361,7 +361,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1330;
 				ORGANIZATIONNAME = "ZeeZide GmbH";
 				TargetAttributes = {
 					E83AF8F71E3E40500039F300 = {
