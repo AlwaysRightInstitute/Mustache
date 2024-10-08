@@ -3,7 +3,7 @@
 //  Noze.io
 //
 //  Created by Helge Heß on 6/1/16.
-//  Copyright © 2016-2021 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2016-2024 ZeeZide GmbH. All rights reserved.
 //
 
 public extension MustacheNode {
@@ -118,6 +118,7 @@ public extension MustacheNode {
     else if let cb = vv as? MustacheSimpleRenderingFunction {
       render(lambda: { text, _ in return cb(text) },
              nodes: nodes, inContext: ctx)
+      return
     }
   
     // Is it a plain false?
@@ -153,8 +154,11 @@ public extension MustacheNode {
         }
       
       default:
-        // keep cursor for non-collections?
+        // Docs: When the value is non-false but not a list, it will be used as
+        //       the context for a single rendering of the block.
+        ctx.enter(scope: vv)
         render(nodes: nodes, inContext: ctx)
+        ctx.leave()
     }
   }
 }
