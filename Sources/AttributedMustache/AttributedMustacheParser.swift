@@ -3,7 +3,7 @@
 //  mustache
 //
 //  Created by Helge Heß on 25.04.21.
-//  Copyright © 2021 ZeeZide GmbH. All rights reserved.
+//  Copyright © 2021-2024 ZeeZide GmbH. All rights reserved.
 //
 
 #if canImport(Foundation)
@@ -11,7 +11,11 @@ import class    Foundation.NSAttributedString
 import struct   Foundation.NSRange
 import protocol Mustache.KeyValueCodingType
 
+#if compiler(>=6)
+extension NSAttributedString: @retroactive KeyValueCodingType {}
+#else
 extension NSAttributedString: KeyValueCodingType {}
+#endif
 
 public struct AttributedMustacheParser {
   
