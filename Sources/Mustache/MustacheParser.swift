@@ -212,6 +212,8 @@ public struct MustacheParser {
 
 #if os(Linux)
   import func Glibc.memcpy
+#elseif os(Windows)
+  import func ucrt.memcpy
 #else
   import func Darwin.memcpy
 #endif
