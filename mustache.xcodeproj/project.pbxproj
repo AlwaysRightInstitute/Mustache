@@ -94,7 +94,7 @@
 		E896BA531E6F1047003183A8 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Base.xcconfig; path = xcconfig/Base.xcconfig; sourceTree = "<group>"; };
 		E896BA541E6F1047003183A8 /* SharedLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = SharedLib.xcconfig; path = xcconfig/SharedLib.xcconfig; sourceTree = "<group>"; };
 		E8AFFF3E1E6F11B50074266E /* MustacheTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MustacheTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E8AFFF491E6F125D0074266E /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/mustacheTests/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
+		E8AFFF491E6F125D0074266E /* MustacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MustacheTests.swift; path = Tests/MustacheTests/MustacheTests.swift; sourceTree = SOURCE_ROOT; };
 		E8C094DF1E49FA670041E7E8 /* GNUmakefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = GNUmakefile; sourceTree = "<group>"; };
 		E8C321512635A810001E3EC8 /* StaticLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = StaticLib.xcconfig; path = xcconfig/StaticLib.xcconfig; sourceTree = "<group>"; };
 		E8C321562635A83F001E3EC8 /* libMustache.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMustache.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,7 +228,7 @@
 				E865CE3B2636EBB3008F71E2 /* AttributedMustacheTests.swift */,
 			);
 			name = MustacheTests;
-			path = Tests/mustacheTests;
+			path = Tests/MustacheTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -614,7 +614,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Tests/mustacheTests/Info.plist;
+				INFOPLIST_FILE = Tests/MustacheTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alwaysrightinstitute.mustache.MustacheTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -628,7 +628,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = Tests/mustacheTests/Info.plist;
+				INFOPLIST_FILE = Tests/MustacheTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alwaysrightinstitute.mustache.MustacheTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
